@@ -1,0 +1,4 @@
+.vscode
+kernel/isodir
+kernel/object_files
+bochs_config/bochslog.txt
