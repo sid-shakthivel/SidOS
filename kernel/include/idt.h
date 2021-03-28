@@ -1,1 +1,1 @@
-void initialize_idt();
+void initialize_idt(void);

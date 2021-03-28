@@ -1,4 +1,4 @@
-void initialize_pic();
-void send_PIC_acknowledgment(unsigned char iqr);
-void clear_mask_IRQ(unsigned int irq);
-void mask_IRQ(unsigned int irq);
+void initialize_pic(void);
+void send_PIC_acknowledgment(uint8_t irq);
+void clear_mask_IRQ(size_t irq);
+void mask_IRQ(size_t irq);

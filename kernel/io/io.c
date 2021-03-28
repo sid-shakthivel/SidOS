@@ -5,7 +5,7 @@
 
 #include "../include/io.h"
 
-void outb(uint16_t port, unsigned char val)
+void outb(uint16_t port, uint8_t val)
 {
     asm volatile("out %0, %1"
                  :

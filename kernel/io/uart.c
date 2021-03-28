@@ -1,20 +1,20 @@
 #include <stdbool.h>
-#include <stddef.h>
+#include <stddef.h> 
 #include <stdint.h>
 #include <stdarg.h>
 
-#include "../include/vga_text.h"
+#include "../include/string.h"
 #include "../include/uart.h"
 #include "../include/io.h"
 
-int PORT = 0;
+size_t PORT = 0;
 
-int is_transmit_empty()
+int is_transmit_empty(void)
 {
     return inb(PORT + 5) & 0x20;
 }
 
-void write_serial(char a)
+void write_serial(uint8_t a)
 {
     while (is_transmit_empty() == 0)
         ;
@@ -22,10 +22,10 @@ void write_serial(char a)
     outb(PORT, a);
 }
 
-void write_string_to_serial(char *string)
+void write_string_to_serial(uint8_t *string)
 {
-    unsigned int i = 0;
-    unsigned int length = strlen(string);
+    size_t i = 0;
+    size_t length = strlen(string);
 
     for (i = 0; i < length; i++)
     {
@@ -33,7 +33,7 @@ void write_string_to_serial(char *string)
     }
 }
 
-void initialize_serial(int port)
+void initialize_serial(size_t port)
 {
     PORT = port;
 

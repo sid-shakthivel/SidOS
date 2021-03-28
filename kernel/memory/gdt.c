@@ -7,8 +7,7 @@
 #include "../include/vga_text.h"
 
 extern void setGdt(uint32_t base, uint16_t limit);
-
-struct gdt_descriptor
+typedef struct GDT_Descriptor
 {
     uint16_t lower_limit;
     uint16_t lower_base;
@@ -16,9 +15,9 @@ struct gdt_descriptor
     uint8_t access_byte;
     uint8_t granularity;
     uint8_t upper_base;
-};
+} gdt_descriptor;
 
-struct gdt_descriptor gdt[5];
+gdt_descriptor gdt[5];
 
 void set_gdt_entry(uint32_t num, uint32_t base, uint32_t limit, uint8_t access_byte, uint8_t granularity)
 {
@@ -31,7 +30,7 @@ void set_gdt_entry(uint32_t num, uint32_t base, uint32_t limit, uint8_t access_b
     gdt[num].upper_base = 0xFF000000 & base;
 }
 
-void initialize_gdt()
+void initialize_gdt(void)
 {
     set_gdt_entry(0, 0, 0, 0, 0);                // Null Descriptor
     set_gdt_entry(1, 0, 0xFFFFFFFF, 0x9A, 0xCF); // Code Entry (kernel)
@@ -40,5 +39,5 @@ void initialize_gdt()
     set_gdt_entry(4, 0, 0xFFFFFFFF, 0xF2, 0xCF); // Data Entry (user mode)
     // // Add a TSS later (when I know what one is
 
-    setGdt((uint32_t)&gdt, (sizeof(struct gdt_descriptor) * 5) - 1);
+    setGdt((uint32_t)&gdt, (sizeof(gdt_descriptor) * 5) - 1);
 }

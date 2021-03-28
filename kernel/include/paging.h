@@ -1,6 +1,6 @@
 #include "multiboot.h"
 
-unsigned int calculate_max_memory(multiboot_info_t *mbd);
-void initialize_paging(int start_memory_location, int final_memory_location);
-int *allocate_page();
-void free_page(int *memory_location_pointer);
+size_t calculate_max_memory(multiboot_info_t *mbd);
+void initialize_paging(size_t start_memory_location, size_t final_memory_location);
+size_t *allocate_page(void);
+void free_page(size_t *memory_location_pointer);

@@ -2,8 +2,8 @@ myos.iso: myos.bin
 	cp myos.bin isodir/boot/myos.bin
 	grub-mkrescue -o myos.iso isodir
 
-myos.bin: linker.ld object_files/kernel.o object_files/uart.o object_files/vga_text.o object_files/gdt.o object_files/set_gdt.o object_files/boot.o object_files/idt.o object_files/set_idt.o object_files/ISRs.o object_files/io.o object_files/pic.o object_files/keyboard.o object_files/interrupts.o object_files/paging.o
-	i686-elf-gcc -T linker.ld -o myos.bin -ffreestanding -O2 -nostdlib object_files/boot.o object_files/kernel.o object_files/vga_text.o object_files/gdt.o object_files/uart.o object_files/set_gdt.o object_files/idt.o object_files/set_idt.o object_files/ISRs.o object_files/io.o object_files/pic.o object_files/keyboard.o object_files/interrupts.o object_files/paging.o -lgcc
+myos.bin: linker.ld object_files/kernel.o object_files/uart.o object_files/vga_text.o object_files/gdt.o object_files/set_gdt.o object_files/boot.o object_files/idt.o object_files/set_idt.o object_files/ISRs.o object_files/io.o object_files/pic.o object_files/keyboard.o object_files/interrupts.o object_files/paging.o object_files/string.o
+	i686-elf-gcc -T linker.ld -o myos.bin -ffreestanding -O2 -nostdlib object_files/boot.o object_files/kernel.o object_files/vga_text.o object_files/gdt.o object_files/uart.o object_files/set_gdt.o object_files/idt.o object_files/set_idt.o object_files/ISRs.o object_files/io.o object_files/pic.o object_files/keyboard.o object_files/interrupts.o object_files/paging.o object_files/string.o -lgcc
 
 object_files/kernel.o: kernel.c
 	i686-elf-gcc -c kernel.c -o object_files/kernel.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra
@@ -31,6 +31,9 @@ object_files/keyboard.o: interrupts/keyboard.c
 
 object_files/paging.o: memory/paging.c
 	i686-elf-gcc -c memory/paging.c -o object_files/paging.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra
+
+object_files/string.o: string.c
+	i686-elf-gcc -c string.c -o object_files/string.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra
 
 object_files/io.o: io/io.c
 	i686-elf-gcc -c io/io.c -o object_files/io.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra

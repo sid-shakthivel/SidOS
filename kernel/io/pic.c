@@ -1,3 +1,8 @@
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdarg.h>
+
 #include "../include/pic.h"
 #include "../include/io.h"
 #include "../include/vga_text.h"
@@ -9,7 +14,7 @@
 
 #define ICW4_8086 0x01 /* 8086/88 (MCS-80/85) mode */
 
-void initialize_pic()
+void initialize_pic(void)
 {
     outb(PIC1, ICW1); // Initialises PICS
     outb(PIC2, ICW1);
@@ -28,7 +33,7 @@ void initialize_pic()
     asm("sti");
 }
 
-void send_PIC_acknowledgment(unsigned char irq)
+void send_PIC_acknowledgment(uint8_t irq)
 {
     if (irq >= 0x28)
     {
@@ -37,7 +42,7 @@ void send_PIC_acknowledgment(unsigned char irq)
     outb((PIC1), 0x20);
 }
 
-void clear_mask_IRQ(unsigned int irq)
+void clear_mask_IRQ(size_t irq)
 {
     if (irq < 0x08)
     {
@@ -49,7 +54,7 @@ void clear_mask_IRQ(unsigned int irq)
     }
 }
 
-void mask_IRQ(unsigned int irq)
+void mask_IRQ(size_t irq)
 {
     if (irq < 0x08)
     {

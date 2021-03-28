@@ -51,16 +51,16 @@ extern void irq_44_handler();
 extern void irq_45_handler();
 extern void irq_46_handler();
 
-struct idt_descriptor
+typedef struct IDT_Descriptor
 {
     uint16_t lower_offset;
     uint16_t selector;
     uint8_t zero;
     uint8_t type_attr;
     uint16_t higher_offset;
-};
+} idt_descriptor;
 
-struct idt_descriptor idt[256];
+idt_descriptor idt[256];
 
 void set_idt_descriptor(uint32_t num, uint32_t offset, uint16_t selector, uint8_t type_attr)
 {
@@ -71,7 +71,7 @@ void set_idt_descriptor(uint32_t num, uint32_t offset, uint16_t selector, uint8_
     idt[num].higher_offset = 0xFFFF & (offset >> 16); // 16 - 31
 }
 
-void initialize_idt()
+void initialize_idt(void)
 {
     // Exceptions
     set_idt_descriptor(0x00, (uint32_t)irq_0_handler, 0x08, 0b11101111);
@@ -124,5 +124,5 @@ void initialize_idt()
     set_idt_descriptor(0x2D, (uint32_t)irq_45_handler, 0x08, 0b11101110);
     set_idt_descriptor(0x2E, (uint32_t)irq_46_handler, 0x08, 0b11101110);
 
-    setIdt((uint32_t)&idt, sizeof(struct idt_descriptor) * 256 - 1);
+    setIdt((uint32_t)&idt, sizeof(idt_descriptor) * 256 - 1);
 }

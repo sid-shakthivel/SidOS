@@ -1,1 +1,1 @@
-void on_keyboard_interrupt();
+void on_keyboard_interrupt(void);

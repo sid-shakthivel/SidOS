@@ -4,8 +4,8 @@
     CLD
     extern on_generic_interrupt
     CALL on_generic_interrupt
-    ADD ESP, 0x04
     POPAD
+    ADD ESP, 0x04
 %endmacro
 
 %macro handle_generic_exception 1
@@ -14,8 +14,8 @@
     CLD
     extern on_generic_exception
     CALL on_generic_exception
-    ADD ESP, 4
     POPAD
+    ADD ESP, 0x04
 %endmacro
 
 ; Exceptions

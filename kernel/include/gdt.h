@@ -1,1 +1,1 @@
-void initialize_gdt();
+void initialize_gdt(void);
