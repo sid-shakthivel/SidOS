@@ -37,6 +37,7 @@ SECTIONS
 		*(COMMON)
 		*(.bss)
 		/* The dot means get the current memory location */
+		. = ALIGN(4k);
 		__kernel_end = .;
 	}
  

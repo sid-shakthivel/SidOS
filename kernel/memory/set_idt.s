@@ -1,4 +1,4 @@
-[GLOBAL setIdt]    ; Allows the C code to call setIdt()
+[GLOBAL setIdt]
 
 idt DW 0
     DD 0

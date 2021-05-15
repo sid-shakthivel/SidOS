@@ -7,6 +7,7 @@
 #include "../include/vga_text.h"
 
 extern void setGdt(uint32_t base, uint16_t limit);
+
 typedef struct GDT_Descriptor
 {
     uint16_t lower_limit;
