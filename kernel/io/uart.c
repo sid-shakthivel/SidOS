@@ -1,10 +1,10 @@
 #include <stdbool.h>
-#include <stddef.h> 
+#include <stddef.h>
 #include <stdint.h>
 #include <stdarg.h>
 
 #include "../include/string.h"
-#include "../include/uart.h"
+// #include "../include/uart.h"
 #include "../include/io.h"
 
 size_t PORT = 0;

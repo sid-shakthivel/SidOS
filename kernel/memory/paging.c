@@ -26,74 +26,8 @@ uint32_t *page_tables;
 uint32_t number_of_directory_entries = 1024;
 uint32_t number_of_table_entries = 1024;
 
-uint32_t bitExtracted(int number, int k, int p)
-{
-	return (((1 << k) - 1) & (number >> (p - 1)));
-}
-
-uint32_t get_len_of_hex(uint32_t hex)
-{
-	int i = 0;
-	while (hex != 0)
-	{
-		i++;
-		hex = hex / 16;
-	}
-	return i;
-}
-
-void set_page_directory_entry(uint32_t *location, uint32_t page_table_location, uint8_t is_kernel, uint8_t is_writeable)
-{
-	//	Page Align Our Page Table Location
-	switch (get_len_of_hex(page_table_location))
-	{
-		case 6:
-			page_table_location = page_table_location << 8 & 0xFFFFF000;
-			break;
-		case 7:
-			page_table_location = page_table_location << 4 & 0xFFFFF000;
-			break;
-		default:
-			break;
-	}
-
-	//	Make Sure Entry Is 0xFFFFFFFF
-	*location = 0xFFFFF000;
-
-	//	Setting Page Table Address
-	*location = (*location & page_table_location);
-
-	//	Setting Cache Disable Bit To 1
-	*location |= 1 << 4;
-
-	*location |= is_kernel << 2;
-	*location |= is_writeable << 1;
-
-	//	Setting Present Bit To 1
-	*location |= 1 << 0;
-}
-
-void set_page_table_entry(uint32_t *location, uint32_t physical_memory_location, uint8_t is_kernel, uint8_t is_writeable)
-{
-	//	Page Align Physical Memory Location
-
-	switch (get_len_of_hex(physical_memory_location))
-	{
-		case 6:
-			physical_memory_location = (physical_memory_location << 8) & 0xFFFFF000;
-			break;
-		case 7:
-			physical_memory_location = (physical_memory_location << 4) & 0xFFFFF000;
-			break;
-		default:
-			break;
-	}
-
-	//	Make Sure Entry Is 0xFFFFFFFF
-	*location = 0xFFFFF000;
-
-	//	Setting Page Table Address
-	*location = (*location & (uint32_t)physical_memory_location);
+void set_entry(uint32_t *location, uint32_t memory_location, uint8_t is_kernel, uint8_t is_writeable) {
+	*location = memory_location & 0xFFFFF000;
 
 	//	Setting Cache Disable Bit To 1
 	*location |= 1 << 4;
@@ -107,24 +41,22 @@ void set_page_table_entry(uint32_t *location, uint32_t physical_memory_location,
 
 void identity_map(uint32_t maximum_memory)
 {
-//	uint32_t *start_of_usable_memory = page_tables + (number_of_table_entries * number_of_table_entries);
-
 	//	Set Up Page Directory With Page Table Entries
 
-	uint32_t current_page_table_address = (uint32_t)page_tables;
+	uint32_t current_page_table = (uint32_t)page_tables;
 
-	for (uint32_t *current_memory_address = page_directory; current_memory_address < page_tables; ++current_memory_address)
+	for (uint32_t *current_page_directory_entry = page_directory; current_page_directory_entry < page_tables; ++current_page_directory_entry)
 	{
-		set_page_directory_entry(current_memory_address, current_page_table_address, 1, 1);
-		current_page_table_address += 4096;
+		set_entry(current_page_directory_entry, current_page_table, 1, 1);
+		current_page_table += 4096;
 	}
 
 	// Setup Page Tables - Map All Physical Addresses To Virtual Ones
 
-	for (uint32_t *current_memory_address = 0; (uint32_t) current_memory_address < maximum_memory; current_memory_address++)
+	for (uint32_t current_memory_address = 0; current_memory_address < 0x00000000021acfff; ++current_memory_address)
 	{
-		uint32_t* index = page_tables + ((uint32_t) current_memory_address / 4096);
-		set_page_table_entry(index, (uint32_t)current_memory_address, 1, 1);
+		uint32_t *index = (uint32_t *)page_tables + (current_memory_address / 4096);
+		set_entry(index, current_memory_address, 1, 1);
 	}
 }
 
@@ -137,7 +69,9 @@ uint32_t initialize_paging(uint32_t maximum_memory)
 	identity_map(maximum_memory);
 
 	loadPageDirectory(page_directory);
-//	enablePaging();
+	enablePaging();
+
+	printf("HELLO THERE\n");
 
 	return 1;
 }

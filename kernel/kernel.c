@@ -24,24 +24,24 @@ void kernel_main(multiboot_info_t *mbd)
     initialize_gdt();
     initialize_idt();
     initialize_pic();
-	size_t start_of_memory = initialize_paging(calculate_max_memory(mbd));
-	initialize_page_frame_allocator(start_of_memory, calculate_max_memory(mbd));
+    size_t start_of_memory = initialize_paging(calculate_max_memory(mbd));
+    initialize_page_frame_allocator(start_of_memory, calculate_max_memory(mbd));
 
-//    clear_mask_IRQ(0x01);
-//    clear_mask_IRQ(0x21);
-//
-//	size_t *test = allocate_page();
-//	printf("TEST = %d\n", test);
-//
-//	 free_page(test);
-//
-//	size_t *best = allocate_page();
-//	printf("BEST = %d\n", best);
-//
-//	clear_mask_IRQ(0x01);
-//
-//    for (;;)
-//    {
-//        asm("hlt");
-//    }
+    //    clear_mask_IRQ(0x01);
+    //    clear_mask_IRQ(0x21);
+    //
+    //	size_t *test = allocate_page();
+    //	printf("TEST = %d\n", test);
+    //
+    //	 free_page(test);
+    //
+    //	size_t *best = allocate_page();
+    //	printf("BEST = %d\n", best);
+    //
+    //	clear_mask_IRQ(0x01);
+    //
+    //    for (;;)
+    //    {
+    //        asm("hlt");
+    //    }
 }
