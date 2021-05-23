@@ -18,91 +18,76 @@ typedef struct Linked_List
 	page *tail;
 } linked_list;
 
-size_t *pCurrentMemoryLocation;
-size_t *pEndMemoryLocation;
+uint32_t *pCurrentMemoryLocation;
+uint32_t *pEndMemoryLocation;
 
 linked_list *linked_list_t;
-size_t *pLengthOfLinkedList;
+uint32_t *pLengthOfLinkedList;
 
 void push(page *pTest);
-size_t *pop();
+uint32_t *pop();
 
-void initialize_page_frame_allocator(size_t start_memory_location, size_t final_memory_location)
+void initialize_page_frame_allocator(uint32_t start_memory_location, uint32_t final_memory_location)
 {
-	// Stores pointer to current memory location at end of kernel code
-	pCurrentMemoryLocation = (size_t *)start_memory_location;
+	pCurrentMemoryLocation = (uint32_t *) start_memory_location;
+	*pCurrentMemoryLocation = (uint32_t) (((uint32_t *) start_memory_location) + 5);
 
-	pEndMemoryLocation = (size_t *)((size_t)pCurrentMemoryLocation + 4);
-
-	pLengthOfLinkedList = (size_t *)((size_t)pCurrentMemoryLocation + 8);
-
-	linked_list_t = (linked_list *)((size_t)pCurrentMemoryLocation + 12);
-
-	*pCurrentMemoryLocation = ((size_t)pCurrentMemoryLocation + 20);
-
+	pEndMemoryLocation = ((uint32_t *) start_memory_location) + 1;
 	*pEndMemoryLocation = final_memory_location;
 
+	pLengthOfLinkedList = ((uint32_t *) start_memory_location) + 2;
 	*pLengthOfLinkedList = 0;
+
+	linked_list_t = (linked_list *) (((uint32_t *) start_memory_location) + 3);
 }
 
-size_t *allocate_page(void)
+uint32_t *allocate_page(void)
 {
 	if ((*pCurrentMemoryLocation + 4096) > *pEndMemoryLocation)
-		return (size_t *)-1;
+		return (uint32_t *)-1;
 
 	if (*pLengthOfLinkedList == 0)
 	{
-		// Move pointer by 4KiB
 		*pCurrentMemoryLocation = *pCurrentMemoryLocation + 4096;
 
-		// Return pointer to previous memory location
-		return (size_t *)(*pCurrentMemoryLocation - 4096);
+		return (uint32_t *)(*pCurrentMemoryLocation - 4096);
 	}
 
-	// Pop off linked list, and return the pointer
 	return pop();
 }
 
 void free_page(size_t *memory_location_pointer)
 {
-	// Make new struct
-	page newPage;
+	page newPage, *pPage;
 
-	// Set next node to NULL
 	newPage.next = NULL;
 
-	// We need a pointer that is AT the memory location
-	page *pTest;
+	pPage = (page *)memory_location_pointer;
 
-	// Set pointer to memory location
-	pTest = (page *)memory_location_pointer;
+	*pPage = newPage;
 
-	// Set the value in that memory location to the struct
-	*pTest = newPage;
-
-	// Push to linked list
-	push(pTest);
+	push(pPage);
 }
 
-void push(page *pTest)
+void push(page *pPage)
 {
 	if (*pLengthOfLinkedList == 0)
 	{
-		linked_list_t->head = pTest;
-		linked_list_t->tail = pTest;
+		linked_list_t->head = pPage;
+		linked_list_t->tail = pPage;
 	}
 	else
 	{
-		linked_list_t->tail->next = pTest;
+		linked_list_t->tail->next = pPage;
 	}
 
 	(*pLengthOfLinkedList) = (*pLengthOfLinkedList) + 1;
 }
 
-size_t *pop()
+uint32_t *pop()
 {
 	page *new_head = linked_list_t->head->next;
-	size_t *current_head = (size_t *)linked_list_t->head;
+	uint32_t *current_head = (uint32_t *)linked_list_t->head;
 	linked_list_t->head = new_head;
 	return current_head;
 }

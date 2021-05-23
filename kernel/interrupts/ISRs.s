@@ -154,7 +154,7 @@ irq_reserved_handler:
     IRET
 
 irq_32_handler:
-    handle_generic_exception 0x20
+    handle_generic_interrupt 0x20
     IRET 
 
 irq_33_handler:

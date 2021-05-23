@@ -39,7 +39,7 @@ void set_entry(uint32_t *location, uint32_t memory_location, uint8_t is_kernel, 
 	*location |= 1 << 0;
 }
 
-void identity_map(uint32_t maximum_memory)
+void identity_map()
 {
 	//	Set Up Page Directory With Page Table Entries
 
@@ -60,20 +60,17 @@ void identity_map(uint32_t maximum_memory)
 	}
 }
 
-uint32_t initialize_paging(uint32_t maximum_memory)
+uint32_t initialize_paging()
 {
-	//	Initialise Page Directory and Page Table to Their Respective Locations
 	page_directory = (uint32_t *)&__kernel_end;
 	page_tables = page_directory + number_of_directory_entries;
 
-	identity_map(maximum_memory);
+	identity_map();
 
 	loadPageDirectory(page_directory);
 	enablePaging();
 
-	printf("HELLO THERE\n");
-
-	return 1;
+	return (uint32_t) &__kernel_end + (1024 * 4) + (1024 * 4 * 1024);
 }
 
 size_t calculate_max_memory(multiboot_info_t *mbd)

@@ -1,8 +1,13 @@
 #ifndef PAGE_FRAME_ALLOCATOR_H
 #define PAGE_FRAME_ALLOCATOR_H
 
-void initialize_page_frame_allocator(size_t start_memory_location, size_t final_memory_location);
-size_t *allocate_page(void);
-void free_page(size_t *memory_location_pointer);
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdarg.h>
+
+void initialize_page_frame_allocator(uint32_t start_memory_location, uint32_t final_memory_location);
+uint32_t *allocate_page(void);
+void free_page(uint32_t *memory_location_pointer);
 
 #endif

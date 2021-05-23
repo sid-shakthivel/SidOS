@@ -23,6 +23,5 @@ all: $(C_OBJECTS) $(ASSEMBLY_OBJECTS)
 $(C_OBJECTS): $(C_SOURCES)
 	$(CC) $(CFLAGS) -c $(patsubst $(OBJ)/%.o, %.c, $@) -o $@
 
-
 $(ASSEMBLY_OBJECTS): $(ASSEMBLY_SOURCES)
 	$(ASSEMBLER) $(ASSEMBLER_FLAGS) $(patsubst $(OBJ)/%.o, %.s, $@) -o $@

@@ -8,7 +8,7 @@
 
 #include "multiboot.h"
 
-uint32_t initialize_paging(uint32_t maximum_memory);
+uint32_t initialize_paging();
 size_t calculate_max_memory(multiboot_info_t *mbd);
 
 #endif
