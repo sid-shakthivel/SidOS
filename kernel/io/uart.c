@@ -7,7 +7,7 @@
 // #include "../include/uart.h"
 #include "../include/io.h"
 
-size_t PORT = 0;
+uint32_t PORT = 0;
 
 int is_transmit_empty(void)
 {
@@ -24,8 +24,8 @@ void write_serial(uint8_t a)
 
 void write_string_to_serial(uint8_t *string)
 {
-    size_t i = 0;
-    size_t length = strlen(string);
+    uint32_t i = 0;
+    uint32_t length = strlen(string);
 
     for (i = 0; i < length; i++)
     {
@@ -33,7 +33,7 @@ void write_string_to_serial(uint8_t *string)
     }
 }
 
-void initialize_serial(size_t port)
+void initialize_serial(uint32_t port)
 {
     PORT = port;
 

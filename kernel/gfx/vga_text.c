@@ -12,8 +12,8 @@
 
 uint16_t *terminal_buffer;
 
-size_t terminal_col = 0;
-size_t terminal_row = 0;
+uint32_t terminal_col = 0;
+uint32_t terminal_row = 0;
 
 uint8_t hex_array[16] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 
@@ -38,7 +38,7 @@ enum vga_color
 };
 
 void print_character(uint8_t character);
-size_t print_numeric_character(size_t numberic_character, size_t numberic_base);
+uint32_t print_numeric_character(uint32_t numberic_character, uint32_t numberic_base);
 void delete_character(void);
 uint8_t colour_format(enum vga_color background_colour, enum vga_color foreground_colour);
 uint16_t vga_entry(uint8_t letter, uint8_t colours);
@@ -49,11 +49,11 @@ void initialize_terminal(void)
 
     uint8_t colour = colour_format(VGA_COLOR_WHITE, VGA_COLOR_BLACK);
 
-    for (size_t x = 0; x < VGA_WIDTH; x++)
+    for (uint32_t x = 0; x < VGA_WIDTH; x++)
     {
-        for (size_t y = 0; y < VGA_HEIGHT; y++)
+        for (uint32_t y = 0; y < VGA_HEIGHT; y++)
         {
-            const size_t index = y * VGA_WIDTH + x;
+            const uint32_t index = y * VGA_WIDTH + x;
             terminal_buffer[index] = vga_entry(' ', colour);
         }
     }
@@ -78,12 +78,12 @@ void printf(char *string, ...)
         switch (*++p)
         {
         case 'd':
-            print_numeric_character(va_arg(valist, size_t), 10);
+            print_numeric_character(va_arg(valist, uint32_t), 10);
             break;
         case 'x':
             print_character('0');
             print_character('x');
-            print_numeric_character(va_arg(valist, size_t), 16);
+            print_numeric_character(va_arg(valist, uint32_t), 16);
             break;
         }
     }
@@ -103,7 +103,7 @@ void print_character(uint8_t character)
         return;
     }
 
-    const size_t index = terminal_row * VGA_WIDTH + terminal_col;
+    const uint32_t index = terminal_row * VGA_WIDTH + terminal_col;
     terminal_buffer[index] = vga_entry(character, colour_format(VGA_COLOR_WHITE, VGA_COLOR_BLACK));
 
     terminal_col++;
@@ -116,15 +116,15 @@ void print_character(uint8_t character)
 
     if (terminal_row >= VGA_HEIGHT)
     {
-        for (size_t x = 0; x < VGA_WIDTH; x++)
+        for (uint32_t x = 0; x < VGA_WIDTH; x++)
         {
-            for (size_t y = 0; y <= VGA_HEIGHT; y++)
+            for (uint32_t y = 0; y <= VGA_HEIGHT; y++)
             {
                 terminal_buffer[y * VGA_WIDTH + x] = terminal_buffer[(y + 2) * VGA_WIDTH + x];
             }
         }
 
-        for (size_t x = 0; x < VGA_WIDTH; x++)
+        for (uint32_t x = 0; x < VGA_WIDTH; x++)
         {
             terminal_buffer[(VGA_HEIGHT - 1) * VGA_WIDTH + x] = vga_entry(' ', colour_format(VGA_COLOR_WHITE, VGA_COLOR_BLACK));
         }
@@ -138,13 +138,13 @@ void print_character(uint8_t character)
 void delete_character(void)
 {
     terminal_col--;
-    const size_t index = terminal_row * VGA_WIDTH + terminal_col;
+    const uint32_t index = terminal_row * VGA_WIDTH + terminal_col;
     terminal_buffer[index] = vga_entry(' ', colour_format(VGA_COLOR_WHITE, VGA_COLOR_BLACK));
 }
 
-size_t print_numeric_character(size_t numberic_character, size_t numberic_base)
+uint32_t print_numeric_character(uint32_t numberic_character, uint32_t numberic_base)
 {
-    size_t digit = 0;
+    uint32_t digit = 0;
 
     if (numberic_character < numberic_base)
     {

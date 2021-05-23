@@ -13,6 +13,7 @@
 #include "include/page_frame_allocator.h"
 #include "include/paging.h"
 #include "include/timer.h"
+#include "include/task.h"
 
 #define PORT 0x3f8 // COM1
 
@@ -29,13 +30,7 @@ void kernel_main(multiboot_info_t *mbd)
 	initialize_page_frame_allocator(start_of_memory, calculate_max_memory(mbd));
 	setup_timer(100);
 
+	uint32_t *task_1 = create_task("Task 1");
+
 	clear_mask_IRQ(0x00);
-
-//	Save those registers
-
-	printf("THING 1\n");
-
-//	Switch back to those registers above
-
-	asm volatile ("int $0x20");
 }

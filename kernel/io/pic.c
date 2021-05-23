@@ -42,7 +42,7 @@ void send_PIC_acknowledgment(uint8_t irq)
     outb((PIC1), 0x20);
 }
 
-void clear_mask_IRQ(size_t irq)
+void clear_mask_IRQ(uint32_t irq)
 {
     if (irq < 0x08)
     {
@@ -54,7 +54,7 @@ void clear_mask_IRQ(size_t irq)
     }
 }
 
-void mask_IRQ(size_t irq)
+void mask_IRQ(uint32_t irq)
 {
     if (irq < 0x08)
     {

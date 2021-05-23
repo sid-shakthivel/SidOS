@@ -26,7 +26,8 @@ uint32_t *page_tables;
 uint32_t number_of_directory_entries = 1024;
 uint32_t number_of_table_entries = 1024;
 
-void set_entry(uint32_t *location, uint32_t memory_location, uint8_t is_kernel, uint8_t is_writeable) {
+void set_entry(uint32_t *location, uint32_t memory_location, uint8_t is_kernel, uint8_t is_writeable)
+{
 	*location = memory_location & 0xFFFFF000;
 
 	//	Setting Cache Disable Bit To 1
@@ -70,10 +71,10 @@ uint32_t initialize_paging()
 	loadPageDirectory(page_directory);
 	enablePaging();
 
-	return (uint32_t) &__kernel_end + (1024 * 4) + (1024 * 4 * 1024);
+	return (uint32_t)&__kernel_end + (1024 * 4) + (1024 * 4 * 1024);
 }
 
-size_t calculate_max_memory(multiboot_info_t *mbd)
+uint32_t calculate_max_memory(multiboot_info_t *mbd)
 {
 	multiboot_segment_t *entry = (multiboot_segment_t *)(mbd->mmap_addr);
 
@@ -86,7 +87,7 @@ size_t calculate_max_memory(multiboot_info_t *mbd)
 			max_memory = (uint32_t)entry->addr + (uint32_t)entry->length;
 			break;
 		}
-		entry = (multiboot_segment_t *)((size_t)entry + entry->size + sizeof(entry->size));
+		entry = (multiboot_segment_t *)((uint32_t)entry + entry->size + sizeof(entry->size));
 	}
 
 	return max_memory;

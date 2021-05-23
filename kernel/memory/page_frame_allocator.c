@@ -29,16 +29,16 @@ uint32_t *pop();
 
 void initialize_page_frame_allocator(uint32_t start_memory_location, uint32_t final_memory_location)
 {
-	pCurrentMemoryLocation = (uint32_t *) start_memory_location;
-	*pCurrentMemoryLocation = (uint32_t) (((uint32_t *) start_memory_location) + 5);
+	pCurrentMemoryLocation = (uint32_t *)start_memory_location;
+	*pCurrentMemoryLocation = (uint32_t)(((uint32_t *)start_memory_location) + 5);
 
-	pEndMemoryLocation = ((uint32_t *) start_memory_location) + 1;
+	pEndMemoryLocation = ((uint32_t *)start_memory_location) + 1;
 	*pEndMemoryLocation = final_memory_location;
 
-	pLengthOfLinkedList = ((uint32_t *) start_memory_location) + 2;
+	pLengthOfLinkedList = ((uint32_t *)start_memory_location) + 2;
 	*pLengthOfLinkedList = 0;
 
-	linked_list_t = (linked_list *) (((uint32_t *) start_memory_location) + 3);
+	linked_list_t = (linked_list *)(((uint32_t *)start_memory_location) + 3);
 }
 
 uint32_t *allocate_page(void)
@@ -56,17 +56,13 @@ uint32_t *allocate_page(void)
 	return pop();
 }
 
-void free_page(size_t *memory_location_pointer)
+void free_page(uint32_t *memory_location_pointer)
 {
-	page newPage, *pPage;
+	page *newPage = (page *)memory_location_pointer;
 
-	newPage.next = NULL;
+	newPage->next = NULL;
 
-	pPage = (page *)memory_location_pointer;
-
-	*pPage = newPage;
-
-	push(pPage);
+	push(newPage);
 }
 
 void push(page *pPage)
@@ -91,4 +87,3 @@ uint32_t *pop()
 	linked_list_t->head = new_head;
 	return current_head;
 }
-
