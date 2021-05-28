@@ -19,6 +19,16 @@
 
 extern void preserve_registers();
 
+int test_func() {
+	printf("TEST\n");
+	return 0;
+}
+
+int best_func() {
+	printf("BEST\n");
+	return 0;
+}
+
 void kernel_main(multiboot_info_t *mbd)
 {
 	initialize_terminal();
@@ -28,9 +38,19 @@ void kernel_main(multiboot_info_t *mbd)
 	initialize_pic();
 	uint32_t start_of_memory = initialize_paging();
 	initialize_page_frame_allocator(start_of_memory, calculate_max_memory(mbd));
-	setup_timer(100);
 
-	uint32_t *task_1 = create_task("Task 1");
+	Task *task_1 = create_task("Task 1", test_func);
+	Task *task_2 = create_task("Task 2", best_func);
+
+	setup_timer(100, task_1, task_2);
+
+	printf("HERE\n");
+
+	task_1->func();
 
 	clear_mask_IRQ(0x00);
+
+	task_2->func();
+
+	asm volatile ("int $0x20");
 }

@@ -24,20 +24,17 @@ typedef struct Registers
 	uint32_t EAX;
 } registers;
 
-registers mest;
-int count = 0;
-
 void print_registers(registers registers_t)
 {
 	printf("Registers:\n");
-//	printf("EDI IS %x\n", registers_t.EDI);
-//	printf("ESI IS %x\n", registers_t.ESI);
-//	printf("EBP IS %x\n", registers_t.EBP);
-//	printf("ESP IS %x\n", registers_t.ESP);
-//	printf("EBX IS %x\n", registers_t.EBX);
+	printf("EDI IS %x\n", registers_t.EDI);
+	printf("ESI IS %x\n", registers_t.ESI);
+	printf("EBP IS %x\n", registers_t.EBP);
+	printf("ESP IS %x\n", registers_t.ESP);
+	printf("EBX IS %x\n", registers_t.EBX);
 	printf("EDX IS %x\n", registers_t.EDX);
-//	printf("ECX IS %x\n", registers_t.ECX);
-//	printf("EAX IS %x\n", registers_t.EAX);
+	printf("ECX IS %x\n", registers_t.ECX);
+	printf("EAX IS %x\n", registers_t.EAX);
 }
 
 void on_generic_exception(registers registers_t, uint32_t irq_number)
@@ -52,7 +49,7 @@ void on_generic_interrupt(registers registers_t, uint32_t irq_number)
 	switch (irq_number)
 	{
 	case 0x20:
-		on_timer_interrupt();
+//		on_timer_interrupt();
 		break;
 	case 0x21:
 		on_keyboard_interrupt();
@@ -62,18 +59,7 @@ void on_generic_interrupt(registers registers_t, uint32_t irq_number)
 		break;
 	}
 
-	if (count == 0) {
-		mest = registers_t;
-	} else if (count == 1) {
-		print_registers(mest);
-		print_registers(registers_t);
-//		Change registers
-		test(mest.EDX);
-	}
-
-//	registers_t = registers_t;
+	registers_t = registers_t;
 
 	send_PIC_acknowledgment(irq_number);
-
-	count++;
 }

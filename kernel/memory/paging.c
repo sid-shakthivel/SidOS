@@ -54,7 +54,7 @@ void identity_map()
 
 	// Setup Page Tables - Map All Physical Addresses To Virtual Ones
 
-	for (uint32_t current_memory_address = 0; current_memory_address < 0x00000000021acfff; ++current_memory_address)
+	for (uint32_t current_memory_address = 0; current_memory_address < 0x00000000021acfff; current_memory_address+=1024)
 	{
 		uint32_t *index = (uint32_t *)page_tables + (current_memory_address / 4096);
 		set_entry(index, current_memory_address, 1, 1);

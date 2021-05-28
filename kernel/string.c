@@ -4,6 +4,7 @@
 #include <stdarg.h>
 
 #include "include/string.h"
+#include "include/vga_text.h"
 
 uint32_t strlen(uint8_t *string)
 {
@@ -13,14 +14,4 @@ uint32_t strlen(uint8_t *string)
         i++;
     }
     return i;
-}
-
-void strcpy(char *dest, char *src)
-{
-    uint32_t i = 0;
-    while (src[i] != '\0')
-    {
-        dest[i] = src[i];
-        i++;
-    }
 }

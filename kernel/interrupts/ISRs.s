@@ -154,7 +154,15 @@ irq_reserved_handler:
     IRET
 
 irq_32_handler:
-    handle_generic_interrupt 0x20
+    CLD
+    PUSHF
+    PUSH ESP
+    PUSH EBP
+    extern on_timer_interrupt
+    CALL on_timer_interrupt
+    POPF
+    POP ESP
+    POP EBP
     IRET 
 
 irq_33_handler:

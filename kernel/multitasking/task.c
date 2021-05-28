@@ -8,20 +8,17 @@
 #include "../include/string.h"
 #include "../include/vga_text.h"
 
-typedef struct task
-{
-    char *name;
-    uint32_t *stack_pointer;
-} Task;
-
-uint32_t *create_task(char *name)
+Task *create_task(char *name, int(*func)())
 {
     Task *new_task = (Task *)allocate_page();
-    strcpy(new_task->name, name);
+	new_task->name = name;
 
     // Stack will be 1 page
     new_task->stack_pointer = (uint32_t *)allocate_page() + 1023;
 
-    printf("\nSTACK IS AT %x\n", new_task->stack_pointer);
-    return 0;
+	// Set func to func
+	new_task->func = func;
+
+//	printf("ADDRESS IS %x\n", new_task);
+    return new_task;
 }
