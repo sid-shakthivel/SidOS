@@ -16,6 +16,11 @@ Task *task_one;
 Task *task_two;
 int i = 0;
 
+extern void save_stack();
+
+uint32_t *stack_one;
+uint32_t *stack_two;
+
 void setup_timer(uint32_t hz, Task *task1, Task *task2)
 {
 	hz = 1193180 / hz;
@@ -27,13 +32,23 @@ void setup_timer(uint32_t hz, Task *task1, Task *task2)
 	task_two = task2;
 }
 
-void on_timer_interrupt(uint32_t ebp, uint32_t esp, uint32_t flags) {
+void on_timer_interrupt() {
+	printf("HERE\n");
 	if (i == 0) {
-		printf("EBP IS %x\n", ebp);
-		printf("EIP IS %x\n", esp);
-		printf("FLAGS ARE %x\n", flags);
+		stack_two = task_one->esp;
+	} else if (i % 2 == 0) {
+		stack_one = task_one->esp;
+		stack_two = task_two->esp;
+		save_stack();
+	} else {
+		stack_one = task_one->esp;
+		stack_two = task_two->esp;
+		save_stack();
 	}
-	i++;
+
 	send_PIC_acknowledgment(0x20);
+	i++;
 }
 
+// Stack One always pushes
+// Stack Two always pops

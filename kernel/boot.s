@@ -88,7 +88,7 @@ _start:
 	;    Since they are disabled, this will lock up the computer.
 	; 3) Jump to the hlt instruction if it ever wakes up due to a
 	;    non-maskable interrupt occurring or due to system management mode.
-	cli
+cli
 .hang:	hlt
 	jmp .hang
 .end:

@@ -44,13 +44,6 @@ void kernel_main(multiboot_info_t *mbd)
 
 	setup_timer(100, task_1, task_2);
 
-	printf("HERE\n");
-
-	task_1->func();
-
 	clear_mask_IRQ(0x00);
 
-	task_2->func();
-
-	asm volatile ("int $0x20");
 }

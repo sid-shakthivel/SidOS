@@ -1,23 +1,3 @@
-%macro handle_generic_interrupt 1
-    PUSH %1
-    PUSHAD
-    CLD
-    extern on_generic_interrupt
-    CALL on_generic_interrupt
-    POPAD
-    ADD ESP, 0x04
-%endmacro
-
-%macro handle_generic_exception 1
-    PUSH %1
-    PUSHAD
-    CLD
-    extern on_generic_exception
-    CALL on_generic_exception
-    POPAD
-    ADD ESP, 0x04
-%endmacro
-
 ; Exceptions
 [GLOBAL irq_0_handler]
 [GLOBAL irq_1_handler]
@@ -45,7 +25,7 @@
 
 ; Interrupts
 [GLOBAL irq_32_handler]
-[GLOBAL irq_33_handler] 
+[GLOBAL irq_33_handler]
 [GLOBAL irq_34_handler]
 [GLOBAL irq_35_handler]
 [GLOBAL irq_36_handler]
@@ -60,6 +40,36 @@
 [GLOBAL irq_45_handler]
 [GLOBAL irq_46_handler]
 [GLOBAL irq_47_handler]
+
+%macro handle_generic_interrupt 1
+    PUSH %1
+    PUSHAD
+    CLD
+    extern on_generic_interrupt
+    CALL on_generic_interrupt
+    POPAD
+    ADD ESP, 0x04
+%endmacro
+
+%macro handle_generic_exception 1
+    PUSH %1
+    PUSHAD
+    CLD
+    extern on_generic_exception
+    CALL on_generic_exception
+    POPAD
+    ADD ESP, 0x04
+%endmacro
+
+irq_32_handler:
+    CLD
+    extern on_timer_interrupt
+    CALL on_timer_interrupt
+    xchg bx, bx
+    extern stack_two
+    MOV ESP, [stack_two]
+    POPAD
+    IRET
 
 irq_0_handler:
     handle_generic_exception 0x00
@@ -153,18 +163,6 @@ irq_reserved_handler:
     handle_generic_exception 0x16
     IRET
 
-irq_32_handler:
-    CLD
-    PUSHF
-    PUSH ESP
-    PUSH EBP
-    extern on_timer_interrupt
-    CALL on_timer_interrupt
-    POPF
-    POP ESP
-    POP EBP
-    IRET 
-
 irq_33_handler:
     handle_generic_interrupt 0x21
     IRET
@@ -220,4 +218,3 @@ irq_45_handler:
 irq_46_handler:
     handle_generic_interrupt 0x2E
     IRET
-dd
