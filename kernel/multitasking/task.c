@@ -10,7 +10,9 @@
 
 void Task1Func() {
 	printf("HELLO THERE\n");
-//	while (1) asm("nop");
+	while (true) {
+//		Do stuff
+	}
 }
 
 Task *create_task(char *name, int(*func)())
@@ -18,8 +20,10 @@ Task *create_task(char *name, int(*func)())
     Task *new_task = (Task *)allocate_page();
 	new_task->name = name;
 
-	uint32_t *esp = (uint32_t *)allocate_page() + 1023;
+//	printf("TASK1FUNC IS %x\n", (uint32_t) &Task1Func);
+	uint32_t *esp = (uint32_t *)allocate_page() + 512;
 	uint32_t *top_of_stack = esp;
+	printf("TOP OF STACK IS %x\n", top_of_stack);
 	new_task->esp = (uint32_t *)esp - 14;
 
 	//	IRET Stuff
@@ -27,7 +31,7 @@ Task *create_task(char *name, int(*func)())
 	*(--esp) = 0x10; // SS
 	*(--esp) = (uint32_t)new_task->esp; // ESP
 	*(--esp) = 0x202; // EFLAGS
-	*(--esp) = 0x08; // CS
+	*(--esp) = 0x8; // CS
 	*(--esp) = (uint32_t) &Task1Func; // EIP
 
 //	General Registers
@@ -47,9 +51,16 @@ Task *create_task(char *name, int(*func)())
 }
 
 void list_stack(uint32_t* esp) {
-	uint32_t *thingy = (uint32_t *) esp + 13;
+	uint32_t *thingy = (uint32_t *) esp + 20;
 	for (uint32_t* i = esp; i < thingy; i++) {
 		printf("%x = %x\n", i, *i);
+	}
+}
+
+void clear_stack(uint32_t *esp) {
+	uint32_t *thingy = (uint32_t *) esp + 20;
+	for (uint32_t *i = esp; i < thingy; i++) {
+		*i = 0;
 	}
 }
 

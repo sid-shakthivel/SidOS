@@ -1,16 +1,14 @@
 [GLOBAL save_stack]
+[GLOBAL stack_stuff]
 
 save_stack:
-    MOV EAX, ESP
-    extern stack_one
-    ;xchg bx, bx
-    MOV ESP, [stack_one]
-    PUSH 0
-    PUSH 0x10
-    PUSH stack_one
-    PUSH 0x202
-    PUSH 0x08
-    PUSH 0x100F30
+    PUSH EBP
+    MOV EBP, ESP
+    MOV ESP, EBP
+    POP EBP
+    RET
+
+stack_stuff:
+    xchg bx, bx
     PUSHAD
-    MOV ESP, EAX
     RET

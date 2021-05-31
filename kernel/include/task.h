@@ -14,4 +14,6 @@ Task *create_task(char *name, int(*func)());
 
 void list_stack(uint32_t* stack);
 
+void clear_stack(uint32_t *esp);
+
 #endif

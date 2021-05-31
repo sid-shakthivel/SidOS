@@ -17,9 +17,11 @@ Task *task_two;
 int i = 0;
 
 extern void save_stack();
+extern void stack_stuff();
 
-uint32_t *stack_one;
-uint32_t *stack_two;
+uint32_t *current_stack;
+uint32_t *old_stack;
+uint32_t *next_stack;
 
 void setup_timer(uint32_t hz, Task *task1, Task *task2)
 {
@@ -33,21 +35,17 @@ void setup_timer(uint32_t hz, Task *task1, Task *task2)
 }
 
 void on_timer_interrupt() {
-	printf("HERE\n");
 	if (i == 0) {
-		stack_two = task_one->esp;
-	} else if (i % 2 == 0) {
-		stack_one = task_one->esp;
-		stack_two = task_two->esp;
-		save_stack();
+		next_stack = task_one->esp;
+	} else if (i == 1) {
+		next_stack = task_two->esp;
 	} else {
-		stack_one = task_one->esp;
-		stack_two = task_two->esp;
-		save_stack();
+		next_stack = old_stack;
 	}
 
 	send_PIC_acknowledgment(0x20);
 	i++;
+	old_stack = current_stack;
 }
 
 // Stack One always pushes

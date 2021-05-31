@@ -63,12 +63,19 @@
 
 irq_32_handler:
     CLD
+
+    ;xchg bx, bx
+    PUSHAD
+    extern current_stack
+    MOV [current_stack], ESP
+
     extern on_timer_interrupt
     CALL on_timer_interrupt
-    xchg bx, bx
-    extern stack_two
-    MOV ESP, [stack_two]
+
+    extern next_stack
+    MOV ESP, [next_stack]
     POPAD
+
     IRET
 
 irq_0_handler:
