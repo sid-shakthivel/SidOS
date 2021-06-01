@@ -8,11 +8,9 @@
 #include "../include/pic.h"
 #include "../include/timer.h"
 
-extern void test(uint32_t esp_pointer);
+char *rgszExceptions[31] = {"One Cannot Divide 0 By 0\n", "Single-step interrupt\n", "NMI\n", "Breakpoint\n", "Overflow\n", "Bounds\n", "Invalid Opcode\n", "Coprocessor Not Available\n", "Double Fault\n", "Coprocessor Segment Overrun\n", "Invalid Task State Segment\n", "Segment Not Present\n", "Stack Fault\n", "General Protection Fault\n", "Page fault\n", "Reserved\n", "Math Fault\n", "Alignment Check\n", "Machine Check\n", "SIMD Floating-Point Exception\n", "Virtualisation Exception\n", "Control Protection Exception\n"};
 
-char *exceptions[31] = {"One Cannot Divide 0 By 0\n", "Single-step interrupt\n", "NMI\n", "Breakpoint\n", "Overflow\n", "Bounds\n", "Invalid Opcode\n", "Coprocessor Not Available\n", "Double Fault\n", "Coprocessor Segment Overrun\n", "Invalid Task State Segment\n", "Segment Not Present\n", "Stack Fault\n", "General Protection Fault\n", "Page fault\n", "Reserved\n", "Math Fault\n", "Alignment Check\n", "Machine Check\n", "SIMD Floating-Point Exception\n", "Virtualisation Exception\n", "Control Protection Exception\n"};
-
-typedef struct Registers
+typedef struct SRegisters
 {
 	uint32_t EDI;
 	uint32_t ESI;
@@ -22,44 +20,44 @@ typedef struct Registers
 	uint32_t EDX;
 	uint32_t ECX;
 	uint32_t EAX;
-} registers;
+} SRegisters;
 
-void print_registers(registers registers_t)
+void fnPrintRegisters(SRegisters Registers)
 {
 	printf("Registers:\n");
-	printf("EDI IS %x\n", registers_t.EDI);
-	printf("ESI IS %x\n", registers_t.ESI);
-	printf("EBP IS %x\n", registers_t.EBP);
-	printf("ESP IS %x\n", registers_t.ESP);
-	printf("EBX IS %x\n", registers_t.EBX);
-	printf("EDX IS %x\n", registers_t.EDX);
-	printf("ECX IS %x\n", registers_t.ECX);
-	printf("EAX IS %x\n", registers_t.EAX);
+	printf("EDI IS %x\n", Registers.EDI);
+	printf("ESI IS %x\n", Registers.ESI);
+	printf("EBP IS %x\n", Registers.EBP);
+	printf("ESP IS %x\n", Registers.ESP);
+	printf("EBX IS %x\n", Registers.EBX);
+	printf("EDX IS %x\n", Registers.EDX);
+	printf("ECX IS %x\n", Registers.ECX);
+	printf("EAX IS %x\n", Registers.EAX);
 }
 
-void on_generic_exception(registers registers_t, uint32_t irq_number)
+void fnOnGenericException(SRegisters Registers, uint32_t u32IRQNumber)
 {
-	irq_number > 0x15 ? printf("Intel Reserved\n") : printf(exceptions[irq_number]);
-	registers_t = registers_t;
+	u32IRQNumber > 0x15 ? printf("Intel Reserved\n") : printf(rgszExceptions[u32IRQNumber]);
+	Registers = Registers;
 	// print_registers(registers_t);
 }
 
-void on_generic_interrupt(registers registers_t, uint32_t irq_number)
+void fnOnGenericInterrupt(SRegisters Registers, uint32_t u32IRQNumber)
 {
-	switch (irq_number)
+	switch (u32IRQNumber)
 	{
 	case 0x20:
-//		on_timer_interrupt();
+		//		on_timer_interrupt();
 		break;
 	case 0x21:
-		on_keyboard_interrupt();
+		fnOnKeyboardInterrupt();
 		break;
 	default:
 		printf("Unknown Interrupt\n");
 		break;
 	}
 
-	registers_t = registers_t;
+	Registers = Registers;
 
-	send_PIC_acknowledgment(irq_number);
+	fnSendPICAcknowledgement(u32IRQNumber);
 }

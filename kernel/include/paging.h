@@ -8,7 +8,15 @@
 
 #include "multiboot.h"
 
-uint32_t initialize_paging();
-uint32_t calculate_max_memory(multiboot_info_t *mbd);
+typedef struct SMultibootSegment
+{
+	unsigned int uiSize;
+	unsigned long long int lliAddress;
+	unsigned long long int lliLength;
+	unsigned int uiType;
+} SMultibootSegment;
+
+uint32_t fnInitialisePaging(void);
+uint32_t fnCalculateMaximumMemory(multiboot_info_t *pMBD);
 
 #endif

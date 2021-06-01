@@ -1,9 +1,8 @@
-[GLOBAL setGdt]    ; Allows the C code to call setGdt()
-
 gdtr DW 0 ; For limit storage
      DD 0 ; For base storage
 
-setGdt:
+GLOBAL fnSetGDT
+fnSetGDT:
    MOV   EAX, [ESP + 4]
    MOV   [gdtr + 2], EAX
    MOV   AX, [ESP + 8]

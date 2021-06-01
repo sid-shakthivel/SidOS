@@ -1,82 +1,82 @@
-%macro handle_interrupt 1
-global InterruptHandler%1
-InterruptHandler%1:
+%macro fnHandleInterrupt 1
+global fnInterruptHandler%1
+fnInterruptHandler%1:
     PUSH %1
     PUSHAD
     CLD
-    extern on_generic_interrupt
-    CALL on_generic_interrupt
+    extern fnOnGenericInterrupt
+    CALL fnOnGenericInterrupt
     POPAD
     ADD ESP, 0x04
     IRET
 %endmacro
 
-%macro exception_handler 1
-global ExceptionHandler%1
-ExceptionHandler%1:
+%macro fnHandleException 1
+global fnExceptionHandler%1
+fnExceptionHandler%1:
     PUSH %1
     PUSHAD
     CLD
-    extern on_generic_exception
-    CALL on_generic_exception
+    extern fnOnGenericException
+    CALL fnOnGenericException
     POPAD
     ADD ESP, 0x04
     IRET
 %endmacro
 
 ; Exceptioms
-exception_handler 0
-exception_handler 1
-exception_handler 2
-exception_handler 3
-exception_handler 4
-exception_handler 5
-exception_handler 6
-exception_handler 7
-exception_handler 8
-exception_handler 9
-exception_handler 10
-exception_handler 11
-exception_handler 12
-exception_handler 13
-exception_handler 14
-exception_handler 15
-exception_handler 16
-exception_handler 17
-exception_handler 18
-exception_handler 19
-exception_handler 20
-exception_handler 21
+fnHandleException 0
+fnHandleException 1
+fnHandleException 2
+fnHandleException 3
+fnHandleException 4
+fnHandleException 5
+fnHandleException 6
+fnHandleException 7
+fnHandleException 8
+fnHandleException 9
+fnHandleException 10
+fnHandleException 11
+fnHandleException 12
+fnHandleException 13
+fnHandleException 14
+fnHandleException 15
+fnHandleException 16
+fnHandleException 17
+fnHandleException 18
+fnHandleException 19
+fnHandleException 20
+fnHandleException 21
 
 ; Reserved
-exception_handler 22
+fnHandleException 22
 
 ; Timer
-global InterruptHandler32
-InterruptHandler32:
+global fnInterruptHandler32
+fnInterruptHandler32:
     CLD
     PUSHAD
-    extern current_stack
-    MOV [current_stack], ESP
-    extern on_timer_interrupt
-    CALL on_timer_interrupt
-    extern next_stack
-    MOV ESP, [next_stack]
+    extern pCurrentStack
+    MOV [pCurrentStack], ESP
+    extern fnOnTimerInterrupt
+    CALL fnOnTimerInterrupt
+    extern pNextStack
+    MOV ESP, [pNextStack]
     POPAD
     IRET
 
 ; Interrupts
-handle_interrupt 33
-handle_interrupt 34
-handle_interrupt 35
-handle_interrupt 36
-handle_interrupt 37
-handle_interrupt 38
-handle_interrupt 39
-handle_interrupt 40
-handle_interrupt 41
-handle_interrupt 42
-handle_interrupt 43
-handle_interrupt 44
-handle_interrupt 45
-handle_interrupt 46
+fnHandleInterrupt 33
+fnHandleInterrupt 34
+fnHandleInterrupt 35
+fnHandleInterrupt 36
+fnHandleInterrupt 37
+fnHandleInterrupt 38
+fnHandleInterrupt 39
+fnHandleInterrupt 40
+fnHandleInterrupt 41
+fnHandleInterrupt 42
+fnHandleInterrupt 43
+fnHandleInterrupt 44
+fnHandleInterrupt 45
+fnHandleInterrupt 46

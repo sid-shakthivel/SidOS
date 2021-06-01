@@ -1,7 +1,7 @@
 #ifndef UART_H
 #define UART_H
 
-void initialize_serial(uint32_t port);
-void write_string_to_serial(uint8_t *string);
+void fnInitialiseSerial(uint32_t u32Port);
+void fnWriteStringToSerial(uint8_t *szString);
 
 #endif

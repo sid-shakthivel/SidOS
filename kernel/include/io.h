@@ -6,7 +6,7 @@
 #include <stdint.h>
 #include <stdarg.h>
 
-void outb(uint16_t port, unsigned char val);
-uint8_t inb(uint16_t port);
+void fnOutB(uint16_t u16Port, uint8_t u8Value);
+uint8_t fnInB(uint16_t u16Port);
 
 #endif

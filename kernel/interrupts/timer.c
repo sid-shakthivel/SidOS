@@ -10,43 +10,42 @@
 #include "../include/task.h"
 #include "../include/pic.h"
 
-uint32_t timer_ticks = 0;
-
-Task *task_one;
-Task *task_two;
+STask *pTaskOne;
+STask *pTaskTwo;
 int i = 0;
 
-extern void save_stack();
-extern void stack_stuff();
+uint32_t *pCurrentStack;
+uint32_t *pOldStack;
+uint32_t *pNextStack;
 
-uint32_t *current_stack;
-uint32_t *old_stack;
-uint32_t *next_stack;
-
-void setup_timer(uint32_t hz, Task *task1, Task *task2)
+// TODO: Fix the task1, task2 thing
+void fnSetupTimter(uint32_t u32Hertz, STask *task1, STask *task2)
 {
-	hz = 1193180 / hz;
-	outb(0x43, 0x36);
-	outb(0x40, hz & 0xFF);
-	outb(0x40, hz >> 8);
+	u32Hertz = 1193180 / u32Hertz;
+	fnOutB(0x43, 0x36);
+	fnOutB(0x40, u32Hertz & 0xFF);
+	fnOutB(0x40, u32Hertz >> 8);
 
-	task_one = task1;
-	task_two = task2;
+	pTaskOne = task1;
+	pTaskTwo = task2;
 }
 
-void on_timer_interrupt() {
-	if (i == 0) {
-		next_stack = task_one->esp;
-	} else if (i == 1) {
-		next_stack = task_two->esp;
-	} else {
-		next_stack = old_stack;
+void fnOnTimerInterrupt(void)
+{
+	if (i == 0)
+	{
+		pNextStack = pTaskOne->pu32ESP;
+	}
+	else if (i == 1)
+	{
+		pNextStack = pTaskTwo->pu32ESP;
+	}
+	else
+	{
+		pNextStack = pOldStack;
 	}
 
-	send_PIC_acknowledgment(0x20);
+	fnSendPICAcknowledgement(0x20);
 	i++;
-	old_stack = current_stack;
+	pOldStack = pCurrentStack;
 }
-
-// Stack One always pushes
-// Stack Two always pops

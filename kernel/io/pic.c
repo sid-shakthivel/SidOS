@@ -14,54 +14,54 @@
 
 #define ICW4_8086 0x01 /* 8086/88 (MCS-80/85) mode */
 
-void initialize_pic(void)
+void fnInitialisePIC(void)
 {
-    outb(PIC1, ICW1); // Initialises PICS
-    outb(PIC2, ICW1);
+    fnOutB(PIC1, ICW1); // Initialises PICS
+    fnOutB(PIC2, ICW1);
 
-    outb((PIC1 + 1), 0x20); // Offset PICS
-    outb((PIC2 + 1), 0x28);
+    fnOutB((PIC1 + 1), 0x20); // Offset PICS
+    fnOutB((PIC2 + 1), 0x28);
 
-    outb((PIC1 + 1), 4); // tell Master PIC that there is a slave PIC
-    outb((PIC2 + 1), 2); // tell Slave PIC its cascade identity
+    fnOutB((PIC1 + 1), 4); // tell Master PIC that there is a slave PIC
+    fnOutB((PIC2 + 1), 2); // tell Slave PIC its cascade identity
 
-    outb((PIC1 + 1), ICW4_8086);
-    outb((PIC2 + 1), ICW4_8086);
+    fnOutB((PIC1 + 1), ICW4_8086);
+    fnOutB((PIC2 + 1), ICW4_8086);
 
-    outb((PIC1 + 1), 0xFF);
-    outb((PIC2 + 1), 0xFF);
+    fnOutB((PIC1 + 1), 0xFF);
+    fnOutB((PIC2 + 1), 0xFF);
     asm("sti");
 }
 
-void send_PIC_acknowledgment(uint8_t irq)
+void fnSendPICAcknowledgement(uint8_t u8IRQ)
 {
-    if (irq >= 0x28)
+    if (u8IRQ >= 0x28)
     {
-        outb((PIC2), 0x20);
+        fnOutB((PIC2), 0x20);
     }
-    outb((PIC1), 0x20);
+    fnOutB((PIC1), 0x20);
 }
 
-void clear_mask_IRQ(uint32_t irq)
+void fnClearMaskOfIRQ(uint32_t u32IRQ)
 {
-    if (irq < 0x08)
+    if (u32IRQ < 0x08)
     {
-        outb((PIC1 + 1), inb((PIC1 + 1)) & ~(1 << irq));
+        fnOutB((PIC1 + 1), fnInB((PIC1 + 1)) & ~(1 << u32IRQ));
     }
     else
     {
-        outb((PIC2 + 1), inb(PIC2 + 1) & (1 << (irq - 8)));
+        fnOutB((PIC2 + 1), fnInB(PIC2 + 1) & (1 << (u32IRQ - 8)));
     }
 }
 
-void mask_IRQ(uint32_t irq)
+void fnMaskIRQ(uint32_t u32IRQ)
 {
-    if (irq < 0x08)
+    if (u32IRQ < 0x08)
     {
-        outb((PIC1 + 1), inb(PIC1 + 1) & (1 << irq));
+        fnOutB((PIC1 + 1), fnInB(PIC1 + 1) & (1 << u32IRQ));
     }
     else
     {
-        outb((PIC2 + 1), inb(PIC2 + 1) & (1 << irq));
+        fnOutB((PIC2 + 1), fnInB(PIC2 + 1) & (1 << u32IRQ));
     }
 }

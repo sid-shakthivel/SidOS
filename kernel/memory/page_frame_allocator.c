@@ -7,83 +7,83 @@
 #include "../include/page_frame_allocator.h"
 #include "../include/vga_text.h"
 
-typedef struct Page
+typedef struct SPage
 {
-	struct Page *next;
-} page;
+	struct SPage *pNextPage;
+} SPage;
 
-typedef struct Linked_List
+typedef struct SLinked_List
 {
-	page *head;
-	page *tail;
-} linked_list;
+	SPage *pHead;
+	SPage *pTail;
+} SLinked_List;
 
-uint32_t *pCurrentMemoryLocation;
-uint32_t *pEndMemoryLocation;
+uint32_t *pu32CurrentPageFrameAddress;
+uint32_t *pu32EndPageFrameAddress;
 
-linked_list *linked_list_t;
-uint32_t *pLengthOfLinkedList;
+SLinked_List *pLinkedList;
+uint32_t *pu32LengthOfLinkedList;
 
-void push(page *pTest);
-uint32_t *pop();
+void fnPush(SPage *pPage);
+uint32_t *fnPop(void);
 
-void initialize_page_frame_allocator(uint32_t start_memory_location, uint32_t final_memory_location)
+void fnInitialisePageFrameAllocator(uint32_t u32StartOfMemory, uint32_t u32EndOfMemory)
 {
-	pCurrentMemoryLocation = (uint32_t *)start_memory_location;
-	*pCurrentMemoryLocation = (uint32_t)(((uint32_t *)start_memory_location) + 5);
+	pu32CurrentPageFrameAddress = (uint32_t *)u32StartOfMemory;
+	*pu32CurrentPageFrameAddress = (uint32_t)(((uint32_t *)u32StartOfMemory) + 5);
 
-	pEndMemoryLocation = ((uint32_t *)start_memory_location) + 1;
-	*pEndMemoryLocation = final_memory_location;
+	pu32EndPageFrameAddress = ((uint32_t *)u32StartOfMemory) + 1;
+	*pu32EndPageFrameAddress = u32EndOfMemory;
 
-	pLengthOfLinkedList = ((uint32_t *)start_memory_location) + 2;
-	*pLengthOfLinkedList = 0;
+	pu32LengthOfLinkedList = ((uint32_t *)u32StartOfMemory) + 2;
+	*pu32LengthOfLinkedList = 0;
 
-	linked_list_t = (linked_list *)(((uint32_t *)start_memory_location) + 3);
+	pLinkedList = (SLinked_List *)(((uint32_t *)u32StartOfMemory) + 3);
 }
 
-uint32_t *allocate_page(void)
+uint32_t *fnAllocPage(void)
 {
-	if ((*pCurrentMemoryLocation + 4096) > *pEndMemoryLocation)
+	if ((*pu32CurrentPageFrameAddress + 4096) > *pu32EndPageFrameAddress)
 		return (uint32_t *)-1;
 
-	if (*pLengthOfLinkedList == 0)
+	if (*pu32LengthOfLinkedList == 0)
 	{
-		*pCurrentMemoryLocation = *pCurrentMemoryLocation + 4096;
+		*pu32CurrentPageFrameAddress = *pu32CurrentPageFrameAddress + 4096;
 
-		return (uint32_t *)(*pCurrentMemoryLocation - 4096);
+		return (uint32_t *)(*pu32CurrentPageFrameAddress - 4096);
 	}
 
-	return pop();
+	return fnPop();
 }
 
-void free_page(uint32_t *memory_location_pointer)
+void fnFreePage(uint32_t *pu32PageFrameAddress)
 {
-	page *newPage = (page *)memory_location_pointer;
+	SPage *pNewPage = (SPage *)pu32PageFrameAddress;
 
-	newPage->next = NULL;
+	pNewPage->pNextPage = NULL;
 
-	push(newPage);
+	fnPush(pNewPage);
 }
 
-void push(page *pPage)
+void fnPush(SPage *pPage)
 {
-	if (*pLengthOfLinkedList == 0)
+	if (*pu32LengthOfLinkedList == 0)
 	{
-		linked_list_t->head = pPage;
-		linked_list_t->tail = pPage;
+		pLinkedList->pHead = pPage;
+		pLinkedList->pTail = pPage;
 	}
 	else
 	{
-		linked_list_t->tail->next = pPage;
+		pLinkedList->pTail->pNextPage = pPage;
 	}
 
-	(*pLengthOfLinkedList) = (*pLengthOfLinkedList) + 1;
+	(*pu32LengthOfLinkedList) = (*pu32LengthOfLinkedList) + 1;
 }
 
-uint32_t *pop()
+uint32_t *fnPop(void)
 {
-	page *new_head = linked_list_t->head->next;
-	uint32_t *current_head = (uint32_t *)linked_list_t->head;
-	linked_list_t->head = new_head;
-	return current_head;
+	SPage *pNewHead = pLinkedList->pHead->pNextPage;
+	uint32_t *pu32CurrentHead = (uint32_t *)pLinkedList->pHead;
+	pLinkedList->pHead = pNewHead;
+	return pu32CurrentHead;
 }

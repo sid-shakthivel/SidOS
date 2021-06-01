@@ -19,38 +19,43 @@
 
 extern void stack_stuff();
 
-int test_func() {
-	printf("TEST\n");
-	while (true) {
-//		Do stuff
-	}
-	return 0;
-}
-
-int best_func() {
-	printf("BEST\n");
-	while (true) {
-//		Do stuff
-	}
-	return 0;
-}
-
-void kernel_main(multiboot_info_t *mbd)
+int test_func()
 {
-	initialize_terminal();
-	initialize_serial(PORT);
-	initialize_gdt();
-	initialize_idt();
-	initialize_pic();
-	uint32_t start_of_memory = initialize_paging();
-	initialize_page_frame_allocator(start_of_memory, calculate_max_memory(mbd));
+	printf("TEST\n");
+	while (true)
+	{
+		//		Do stuff
+	}
+	return 0;
+}
 
-	Task *task_1 = create_task("Task 1", test_func);
-	Task *task_2 = create_task("Task 2", best_func);
+int best_func()
+{
+	printf("BEST\n");
+	while (true)
+	{
+		//		Do stuff
+	}
+	return 0;
+}
 
-	setup_timer(100, task_1, task_2);
-	
-	clear_mask_IRQ(0x00);
+void kernel_main(multiboot_info_t *pMBD)
+{
+	fnInitaliseTerminal();
+	fnInitialiseSerial(PORT);
+	fnInitialiseGDT();
+	fnInitaliseIDT();
+	fnInitialisePIC();
+	uint32_t u32StartOfMemory = fnInitialisePaging();
+
+	fnInitialisePageFrameAllocator(u32StartOfMemory, fnCalculateMaximumMemory(pMBD));
+
+	STask *pTaskOne = fnCreateNewTask("Task 1", test_func);
+	STask *pTaskTwo = fnCreateNewTask("Task 2", best_func);
+
+	fnSetupTimter(100, pTaskOne, pTaskTwo);
+
+	fnClearMaskOfIRQ(0x00);
 
 	printf("WILL THIS GET CALLED?\n");
 }

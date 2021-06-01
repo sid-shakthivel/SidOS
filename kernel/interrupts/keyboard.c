@@ -7,9 +7,9 @@
 #include "../include/pic.h"
 #include "../include/vga_text.h"
 
-bool bshift = false;
+bool bShift = false;
 
-uint8_t kbd_US[128] =
+uint8_t rgcUSKeyboard[128] =
     {
         0, 27, '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', '\b',
         '\t', /* <-- Tab */
@@ -21,15 +21,15 @@ uint8_t kbd_US[128] =
         ' ', /* Space bar */
 };
 
-uint8_t get_key(uint8_t scancode)
+uint8_t fnGetKey(uint8_t u8Scancode)
 {
-    uint8_t character = 0;
+    uint8_t u8Character = 0;
 
-    character = bshift ? (kbd_US[scancode] - 32) : kbd_US[scancode];
+    u8Character = bShift ? (rgcUSKeyboard[u8Scancode] - 32) : rgcUSKeyboard[u8Character];
 
-    if (bshift)
+    if (bShift)
     {
-        switch (scancode)
+        switch (u8Scancode)
         {
         case 0x27:
             return ':';
@@ -50,27 +50,27 @@ uint8_t get_key(uint8_t scancode)
         }
     }
 
-    if (scancode == 0x2A || scancode == 0x36 || scancode == 0x3A || scancode == 0x0E)
+    if (u8Scancode == 0x2A || u8Scancode == 0x36 || u8Scancode == 0x3A || u8Scancode == 0x0E)
     {
-        bshift = true;
+        bShift = true;
         return 0;
     }
 
-    return character;
+    return u8Character;
 }
 
-void on_keyboard_interrupt(void)
+void fnOnKeyboardInterrupt(void)
 {
-    uint8_t scancode = inb(0x60);
+    uint8_t u8Scancode = fnInB(0x60);
 
-    if (scancode == 0xAA || scancode == 0xBA || scancode == 0xB6)
-        bshift = false;
+    if (u8Scancode == 0xAA || u8Scancode == 0xBA || u8Scancode == 0xB6)
+        bShift = false;
 
-    if (scancode == 0x0E)
-        delete_character();
+    if (u8Scancode == 0x0E)
+        fnDeleteCharacter();
 
-    if (scancode < 0x81)
+    if (u8Scancode < 0x81)
     {
-        print_character(get_key(scancode));
+        fnPrintCharacter(fnGetKey(u8Scancode));
     }
 }

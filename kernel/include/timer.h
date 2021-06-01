@@ -4,15 +4,6 @@
 #include "./task.h"
 #include <stdint.h>
 
-typedef struct IretStack {
-	uint32_t eip;
-	uint32_t cs;
-	uint32_t eflags;
-	uint32_t esp;
-	uint32_t ss;
-} IretStack;
-
-void on_timer_interrupt();
-void setup_timer(uint32_t hz, Task *task1, Task *task2);
+void fnSetupTimter(uint32_t u32Hertz, STask *task1, STask *task2);
 
 #endif //TESOS_TIMER_H

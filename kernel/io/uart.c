@@ -7,40 +7,39 @@
 // #include "../include/uart.h"
 #include "../include/io.h"
 
-uint32_t PORT = 0;
+uint32_t ku32Port = 0;
 
-int is_transmit_empty(void)
+int fnIsTransmitEmpty(void)
 {
-    return inb(PORT + 5) & 0x20;
+    return fnInB(ku32Port + 5) & 0x20;
 }
 
-void write_serial(uint8_t a)
+void fnWriteSerial(uint8_t u8a)
 {
-    while (is_transmit_empty() == 0)
+    while (fnIsTransmitEmpty() == 0)
         ;
 
-    outb(PORT, a);
+    fnOutB(ku32Port, u8a);
 }
 
-void write_string_to_serial(uint8_t *string)
+void fnWriteStringToSerial(uint8_t *szString)
 {
-    uint32_t i = 0;
-    uint32_t length = strlen(string);
+    uint32_t u32Length = strlen(szString);
 
-    for (i = 0; i < length; i++)
+    for (uint32_t i = 0; i < u32Length; i++)
     {
-        write_serial(string[i]);
+        fnWriteSerial(szString[i]);
     }
 }
 
-void initialize_serial(uint32_t port)
+void fnInitialiseSerial(uint32_t u32Port)
 {
-    PORT = port;
+    ku32Port = u32Port;
 
-    outb(PORT + 1, 0x00); // Disable all interrupts
-    outb(PORT + 3, 0x80); // Enable DLAB (set baud rate divisor)
-    outb(PORT + 0, 0x03); // Set divisor to 3 (lo byte) 38400 baud
-    outb(PORT + 1, 0x00); //                  (hi byte)
-    outb(PORT + 3, 0x03); // 8 bits, no parity, one stop bit
-    outb(PORT + 4, 0x0B); // IRQs enabled, RTS/DSR set
+    fnOutB(ku32Port + 1, 0x00); // Disable all interrupts
+    fnOutB(ku32Port + 3, 0x80); // Enable DLAB (set baud rate divisor)
+    fnOutB(ku32Port + 0, 0x03); // Set divisor to 3 (lo byte) 38400 baud
+    fnOutB(ku32Port + 1, 0x00); //                  (hi byte)
+    fnOutB(ku32Port + 3, 0x03); // 8 bits, no parity, one stop bit
+    fnOutB(ku32Port + 4, 0x0B); // IRQs enabled, RTS/DSR set
 }

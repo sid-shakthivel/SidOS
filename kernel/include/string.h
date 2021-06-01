@@ -6,6 +6,6 @@
 #include <stdint.h>
 #include <stdarg.h>
 
-uint32_t strlen(uint8_t *string);
+uint32_t strlen(uint8_t *szString);
 
 #endif

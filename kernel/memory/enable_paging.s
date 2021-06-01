@@ -1,7 +1,5 @@
-[GLOBAL enablePaging]
-[GLOBAL loadPageDirectory]
-
-enablePaging:
+GLOBAL fnEnablePaging
+fnEnablePaging:
     push ebp
     mov ebp, esp
     mov eax, cr0
@@ -11,7 +9,8 @@ enablePaging:
     pop ebp
     ret
 
-loadPageDirectory:
+GLOBAL fnLoadPageDirectory
+fnLoadPageDirectory:
     push ebp
     mov ebp, esp
     mov eax, [esp + 8]

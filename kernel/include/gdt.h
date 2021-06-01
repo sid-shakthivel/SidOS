@@ -1,6 +1,6 @@
 #ifndef GDT_H
 #define GDT_H
 
-void initialize_gdt(void);
+void fnInitialiseGDT(void);
 
 #endif

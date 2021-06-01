@@ -3,17 +3,12 @@
 
 #include <stdint.h>
 
-typedef struct task
+typedef struct STask
 {
-	char *name;
-	int (*func)(void);
-	uint32_t *esp;
-} Task;
+	char *szName;
+	uint32_t *pu32ESP;
+} STask;
 
-Task *create_task(char *name, int(*func)());
-
-void list_stack(uint32_t* stack);
-
-void clear_stack(uint32_t *esp);
+STask *fnCreateNewTask(char *szName, int(*fnFunc)());
 
 #endif

@@ -6,39 +6,38 @@
 #include "../include/gdt.h"
 #include "../include/vga_text.h"
 
-extern void setGdt(uint32_t base, uint16_t limit);
+extern void fnSetGDT(uint32_t base, uint16_t limit);
 
-typedef struct GDT_Descriptor
+typedef struct SGDTDescriptor
 {
-    uint16_t lower_limit;
-    uint16_t lower_base;
-    uint8_t middle_base;
-    uint8_t access_byte;
-    uint8_t granularity;
-    uint8_t upper_base;
-} gdt_descriptor;
+    uint16_t u16LowerLimit;
+    uint16_t u16LowerBase;
+    uint8_t u8MiddleBase;
+    uint8_t u8AccessByte;
+    uint8_t u8Granularity;
+    uint8_t u8UpperBase;
+} SGDTDescriptor;
 
-gdt_descriptor gdt[5];
+SGDTDescriptor rgGDT[5];
 
-void set_gdt_entry(uint32_t num, uint32_t base, uint32_t limit, uint8_t access_byte, uint8_t granularity)
+void fnSetGDTEntry(uint32_t u32Num, uint32_t u32base, uint32_t u32Limit, uint8_t u8AccessByte, uint8_t u8Granularity)
 {
-    gdt[num].lower_limit = (0x0000FFFF & limit);
-    gdt[num].lower_base = 0x0000FFFF & base;
-    gdt[num].middle_base = 0x00FF0000 & base;
-    gdt[num].access_byte = access_byte & 0xFFFF;
-    gdt[num].granularity = (limit >> 16) & 0x0F;
-    gdt[num].granularity |= granularity & 0xF0;
-    gdt[num].upper_base = 0xFF000000 & base;
+	rgGDT[u32Num].u16LowerLimit = (0x0000FFFF & u32Limit);
+	rgGDT[u32Num].u16LowerBase = 0x0000FFFF & u32base;
+	rgGDT[u32Num].u8MiddleBase = 0x00FF0000 & u32base;
+	rgGDT[u32Num].u8AccessByte = u8AccessByte & 0xFFFF;
+	rgGDT[u32Num].u8Granularity = (u32Limit >> 16) & 0x0F;
+	rgGDT[u32Num].u8Granularity |= u8Granularity & 0xF0;
+	rgGDT[u32Num].u8UpperBase = 0xFF000000 & u32base;
 }
 
-void initialize_gdt(void)
+void fnInitialiseGDT(void)
 {
-    set_gdt_entry(0, 0, 0, 0, 0);                // Null Descriptor
-    set_gdt_entry(1, 0, 0xFFFFFFFF, 0x9A, 0xCF); // Code Entry (kernel)
-    set_gdt_entry(2, 0, 0xFFFFFFFF, 0x92, 0xCF); // Data Entry (kernel mode)
-    set_gdt_entry(3, 0, 0xFFFFFFFF, 0xFA, 0xCF); // Code Entry (user mode)
-    set_gdt_entry(4, 0, 0xFFFFFFFF, 0xF2, 0xCF); // Data Entry (user mode)
-    // // Add a TSS later (when I know what one is
+	fnSetGDTEntry(0, 0, 0, 0, 0);                // Null Descriptor
+	fnSetGDTEntry(1, 0, 0xFFFFFFFF, 0x9A, 0xCF); // Code Entry (kernel)
+	fnSetGDTEntry(2, 0, 0xFFFFFFFF, 0x92, 0xCF); // Data Entry (kernel mode)
+	fnSetGDTEntry(3, 0, 0xFFFFFFFF, 0xFA, 0xCF); // Code Entry (user mode)
+	fnSetGDTEntry(4, 0, 0xFFFFFFFF, 0xF2, 0xCF); // Data Entry (user mode)
 
-    setGdt((uint32_t)&gdt, (sizeof(gdt_descriptor) * 5) - 1);
+	fnSetGDT((uint32_t)&rgGDT, (sizeof(SGDTDescriptor) * 5) - 1);
 }

@@ -3,9 +3,9 @@
 
 #include <stddef.h>
 
-void initialize_terminal(void);
-void printf(char *string, ...);
-void print_character(unsigned char character);
-void delete_character();
+void fnInitaliseTerminal(void);
+void printf(char *szString, ...);
+void fnPrintCharacter(uint8_t u8Character);
+void fnDeleteCharacter(void);
 
 #endif

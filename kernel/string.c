@@ -6,10 +6,10 @@
 #include "include/string.h"
 #include "include/vga_text.h"
 
-uint32_t strlen(uint8_t *string)
+uint32_t strlen(uint8_t *szString)
 {
     uint32_t i = 0;
-    while (string[i] != '\0')
+    while (szString[i] != '\0')
     {
         i++;
     }

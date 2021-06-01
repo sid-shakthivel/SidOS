@@ -6,8 +6,8 @@
 #include <stdint.h>
 #include <stdarg.h>
 
-void initialize_page_frame_allocator(uint32_t start_memory_location, uint32_t final_memory_location);
-uint32_t *allocate_page(void);
-void free_page(uint32_t *memory_location_pointer);
+void fnInitialisePageFrameAllocator(uint32_t u32StartOfMemory, uint32_t u32EndOfMemory);
+uint32_t *fnAllocPage(void);
+void fnFreePage(uint32_t *pu32PageFrameAddress);
 
 #endif

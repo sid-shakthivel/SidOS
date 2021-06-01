@@ -5,18 +5,18 @@
 
 #include "../include/io.h"
 
-void outb(uint16_t port, uint8_t val)
+void fnOutB(uint16_t u16Port, uint8_t u8Value)
 {
     asm volatile("out %0, %1"
                  :
-                 : "a"(val), "Nd"(port));
+                 : "a"(u8Value), "Nd"(u16Port));
 }
 
-uint8_t inb(uint16_t port)
+uint8_t fnInB(uint16_t u16Port)
 {
-    uint8_t ret;
+    uint8_t u8Result;
     asm volatile("inb %1, %0"
-                 : "=a"(ret)
-                 : "Nd"(port));
-    return ret;
+                 : "=a"(u8Result)
+                 : "Nd"(u16Port));
+    return u8Result;
 }
