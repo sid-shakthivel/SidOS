@@ -14,10 +14,9 @@ void Task1Func() {
 //		Do stuff
 	}
 }
-
 Task *create_task(char *name, int(*func)())
 {
-    Task *new_task = (Task *)allocate_page();
+	Task *new_task = (Task *)allocate_page();
 	new_task->name = name;
 
 //	printf("TASK1FUNC IS %x\n", (uint32_t) &Task1Func);
@@ -32,7 +31,7 @@ Task *create_task(char *name, int(*func)())
 	*(--esp) = (uint32_t)new_task->esp; // ESP
 	*(--esp) = 0x202; // EFLAGS
 	*(--esp) = 0x8; // CS
-	*(--esp) = (uint32_t) &Task1Func; // EIP
+	*(--esp) = (uint32_t) func; // EIP
 
 //	General Registers
 	*(--esp) = 0; // EAX
@@ -47,7 +46,7 @@ Task *create_task(char *name, int(*func)())
 	// Set func to func
 	new_task->func = func;
 
-    return new_task;
+	return new_task;
 }
 
 void list_stack(uint32_t* esp) {

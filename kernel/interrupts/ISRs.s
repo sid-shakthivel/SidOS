@@ -78,6 +78,8 @@ irq_32_handler:
 
     IRET
 
+
+
 irq_0_handler:
     handle_generic_exception 0x00
     IRET

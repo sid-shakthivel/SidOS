@@ -21,11 +21,17 @@ extern void stack_stuff();
 
 int test_func() {
 	printf("TEST\n");
+	while (true) {
+//		Do stuff
+	}
 	return 0;
 }
 
 int best_func() {
 	printf("BEST\n");
+	while (true) {
+//		Do stuff
+	}
 	return 0;
 }
 
@@ -42,11 +48,9 @@ void kernel_main(multiboot_info_t *mbd)
 	Task *task_1 = create_task("Task 1", test_func);
 	Task *task_2 = create_task("Task 2", best_func);
 
-	printf("TASK 1'S ESP IS %x\n", task_1->esp);
-
 	setup_timer(100, task_1, task_2);
-
-//	stack_stuff();
 	
 	clear_mask_IRQ(0x00);
+
+	printf("WILL THIS GET CALLED?\n");
 }

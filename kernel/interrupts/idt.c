@@ -96,6 +96,8 @@ void initialize_idt(void)
     set_idt_descriptor(0x13, (uint32_t)irq_19_handler, 0x08, 0b11101111);
     set_idt_descriptor(0x14, (uint32_t)irq_20_handler, 0x08, 0b11101111);
     set_idt_descriptor(0x15, (uint32_t)irq_21_handler, 0x08, 0b11101111);
+
+	// Reserved
     set_idt_descriptor(0x16, (uint32_t)irq_reserved_handler, 0x08, 0b11101111);
     set_idt_descriptor(0x17, (uint32_t)irq_reserved_handler, 0x08, 0b11101111);
     set_idt_descriptor(0x18, (uint32_t)irq_reserved_handler, 0x08, 0b11101111);
