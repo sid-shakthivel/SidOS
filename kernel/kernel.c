@@ -19,7 +19,7 @@
 
 extern void stack_stuff();
 
-int test_func()
+int fnTestFunc()
 {
 	printf("TEST\n");
 	while (true)
@@ -29,7 +29,7 @@ int test_func()
 	return 0;
 }
 
-int best_func()
+int fnBestFunc()
 {
 	printf("BEST\n");
 	while (true)
@@ -39,7 +39,7 @@ int best_func()
 	return 0;
 }
 
-void kernel_main(multiboot_info_t *pMBD)
+void fnKernelMain(multiboot_info_t *pMBD)
 {
 	fnInitaliseTerminal();
 	fnInitialiseSerial(PORT);
@@ -50,8 +50,8 @@ void kernel_main(multiboot_info_t *pMBD)
 
 	fnInitialisePageFrameAllocator(u32StartOfMemory, fnCalculateMaximumMemory(pMBD));
 
-	STask *pTaskOne = fnCreateNewTask("Task 1", test_func);
-	STask *pTaskTwo = fnCreateNewTask("Task 2", best_func);
+	STask *pTaskOne = fnCreateNewTask("Task 1", fnTestFunc);
+	STask *pTaskTwo = fnCreateNewTask("Task 2", fnBestFunc);
 
 	fnSetupTimter(100, pTaskOne, pTaskTwo);
 

@@ -4,7 +4,7 @@
 #include <stdarg.h>
 
 #include "../include/string.h"
-// #include "../include/uart.h"
+#include "../include/uart.h"
 #include "../include/io.h"
 
 uint32_t ku32Port = 0;
