@@ -53,19 +53,21 @@ void fnKernelMain(multiboot_info_t *pMBD)
 
 	uint32_t *test = malloc(sizeof(uint32_t) * 10);
 
-//	fnPrintFreeList();
-
 	uint32_t *best = malloc(sizeof(uint32_t) * 5);
 
 //	fnPrintFreeList();
 
 	free(test);
 
-//	fnPrintFreeList();
+	fnPrintFreeList();
 
 	free(best);
 
-//	fnPrintFreeList();
+	fnPrintFreeList();
+
+	uint32_t *hest = malloc(sizeof(uint32_t) * 5);
+
+	fnPrintFreeList();
 
 //	STask *pTaskOne = fnCreateNewTask("Task 1", fnTestFunc);
 //	STask *pTaskTwo = fnCreateNewTask("Task 2", fnBestFunc);

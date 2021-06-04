@@ -15,82 +15,80 @@ typedef struct SFreeNode {
 
 SFreeNode *pHead = NULL;
 SFreeNode *pTail = NULL;
+uint32_t u32LengthOfLinkedList = 1;
 
 uint32_t u32PageLeft = 4096;
 
-void fnSetFreeNode(SFreeNode *pFreeNode, uint32_t u32Size,SFreeNode *pPreviousNode, SFreeNode *pNextNode) {
-	pFreeNode->u32Size = u32Size;
+SFreeNode *fnSetFreeNode(uint32_t *pu32MemoryAddress, uint32_t u32SizeLeft, SFreeNode *pPreviousNode, SFreeNode *pNextNode, uint8_t u8Flag, uint32_t u32Size) {
+	SFreeNode *pNewNode;
+	if (u8Flag == 1) {
+		pNewNode = (SFreeNode *) (pu32MemoryAddress + u32Size + 1);
+	} else {
+		pNewNode = (SFreeNode *) pu32MemoryAddress;
+	}
 
-	pFreeNode->pPrevious = pPreviousNode;
-	pFreeNode->pNext = pNextNode;
+	pNewNode->u32Size = u32SizeLeft;
 
-	u32PageLeft = pFreeNode->u32Size;
+	pNewNode->pPrevious = pPreviousNode;
+	pNewNode->pNext = pNextNode;
+
+	u32PageLeft = pNewNode->u32Size;
+
+	return pNewNode;
 }
 
 uint32_t *malloc(uint32_t u32Size) {
 	u32Size /= 4;
 
-//	Get first node that fits
-
 	SFreeNode *pCurrentNode = pHead;
 	while (pCurrentNode != NULL) {
-		if (pCurrentNode->u32Size >= u32Size) {
+		if (pCurrentNode->u32Size > (u32Size * 4)) {
 			break;
 		}
 		pCurrentNode = pCurrentNode->pNext;
 	}
 
+	SFreeNode *pNewNode;
+	uint32_t *pu32MemoryAddress;
 	if (pCurrentNode == NULL) {
-		uint32_t *pu32MemoryAddress = fnAllocPage();
+		pu32MemoryAddress = fnAllocPage();
+		pNewNode = fnSetFreeNode(pu32MemoryAddress, (4096 - (u32Size * 4 + sizeof(SFreeNode))), NULL, NULL, 1, u32Size);
+	} else {
+		pu32MemoryAddress = (uint32_t *) pCurrentNode;
 
-//		Set free node
-		SFreeNode *pNewNode = (SFreeNode *) (pu32MemoryAddress + u32Size + 1);
-		fnSetFreeNode(pNewNode, (4096 - (u32Size * 4 + sizeof(SFreeNode))), NULL, NULL);
-		pTail = pNewNode;
-		pHead = pNewNode;
+		pCurrentNode->pPrevious->pNext = pCurrentNode->pNext;
+		pCurrentNode->pNext->pPrevious = pCurrentNode->pPrevious;
 
-		*pu32MemoryAddress = u32Size;
-
-		u32PageLeft = pNewNode->u32Size;
-
-		printf("PAGES LEFT IS %d\n", u32PageLeft);
-
-		return (pu32MemoryAddress + 1);
+		pNewNode = fnSetFreeNode(pu32MemoryAddress, (u32PageLeft - (u32Size * 4 + sizeof(SFreeNode))), NULL, NULL, 1, u32Size);
 	}
 
-//	Clear Old Node
-	fnSetFreeNode(pCurrentNode, u32PageLeft, NULL, NULL);
+	if (u32LengthOfLinkedList < 2) {
+		pTail = pNewNode;
+		pHead = pNewNode;
+	} else {
+		printf("CURRENT NODE IS %x\n", pCurrentNode);
 
-//	Setup new node
-	uint32_t *pu32MemoryAddress = (uint32_t *) pCurrentNode;
+		pNewNode->pNext = pHead;
+		pNewNode->u32Size =  u32Size * 4;
+		pHead->pPrevious = pNewNode;
+		pHead = pNewNode;
+	}
 
-	*pu32MemoryAddress = u32Size;
-	pu32MemoryAddress += 1;
+	*pu32MemoryAddress = u32Size * 4;
 
-	SFreeNode *pNewNode = (SFreeNode *) (pu32MemoryAddress + u32Size);
-
-	fnSetFreeNode(pNewNode, (u32PageLeft - (u32Size * 4 + sizeof(SFreeNode))), NULL, NULL);
-
-	printf("PAGES LEFT IS %d\n", u32PageLeft);
-
-	pTail = pNewNode;
-	pHead = pNewNode;
-
-	u32PageLeft = pNewNode->u32Size;
-
-	return pu32MemoryAddress;
+	return (pu32MemoryAddress + 1);
 }
 
 void free(uint32_t *pNode) {
 	uint32_t u32Size = *(--pNode);
 
-//	Setup new node
-	SFreeNode *pNewNode = (SFreeNode *) pNode;
+	SFreeNode *pNewNode = fnSetFreeNode(pNode, u32Size, NULL, NULL, 0, u32Size);
 
-	fnSetFreeNode(pNewNode, u32Size, pTail, NULL);
+	pNewNode->pNext = pHead;
+	pHead->pPrevious = pNewNode;
+	pHead = pNewNode;
 
-	pTail->pNext = pNewNode;
-	pTail = pNewNode;
+	u32LengthOfLinkedList++;
 }
 
 void fnPrintFreeList() {
