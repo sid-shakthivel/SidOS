@@ -14,6 +14,7 @@
 #include "include/paging.h"
 #include "include/timer.h"
 #include "include/task.h"
+#include "include/memory.h"
 
 #define PORT 0x3f8 // COM1
 
@@ -50,12 +51,26 @@ void fnKernelMain(multiboot_info_t *pMBD)
 
 	fnInitialisePageFrameAllocator(u32StartOfMemory, fnCalculateMaximumMemory(pMBD));
 
-	STask *pTaskOne = fnCreateNewTask("Task 1", fnTestFunc);
-	STask *pTaskTwo = fnCreateNewTask("Task 2", fnBestFunc);
+	uint32_t *test = malloc(sizeof(uint32_t) * 10);
 
-	fnSetupTimter(100, pTaskOne, pTaskTwo);
+//	fnPrintFreeList();
 
-	fnClearMaskOfIRQ(0x00);
+	uint32_t *best = malloc(sizeof(uint32_t) * 5);
 
-	printf("WILL THIS GET CALLED?\n");
+//	fnPrintFreeList();
+
+	free(test);
+
+//	fnPrintFreeList();
+
+	free(best);
+
+//	fnPrintFreeList();
+
+//	STask *pTaskOne = fnCreateNewTask("Task 1", fnTestFunc);
+//	STask *pTaskTwo = fnCreateNewTask("Task 2", fnBestFunc);
+//
+//	fnSetupTimter(100, pTaskOne, pTaskTwo);
+//
+//	fnClearMaskOfIRQ(0x00);
 }

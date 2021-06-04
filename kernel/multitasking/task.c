@@ -10,6 +10,7 @@
 
 STask *fnCreateNewTask(char *szName, int(*fnFunc)())
 {
+	printf("SIZE OF TASK IS %x\n", sizeof(STask));
 	STask *pNewTask = (STask *)fnAllocPage();
 	pNewTask->szName = szName;
 
