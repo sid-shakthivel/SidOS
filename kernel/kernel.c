@@ -53,9 +53,11 @@ void fnKernelMain(multiboot_info_t *pMBD)
 
 	uint32_t *test = malloc(sizeof(uint32_t) * 10);
 
+	fnPrintFreeList();
+
 	uint32_t *best = malloc(sizeof(uint32_t) * 5);
 
-//	fnPrintFreeList();
+	fnPrintFreeList();
 
 	free(test);
 
