@@ -4,6 +4,6 @@
 #include "./task.h"
 #include <stdint.h>
 
-void fnSetupTimter(uint32_t u32Hertz, STask *task1, STask *task2);
+void fnSetupTimer(uint32_t u32Hertz);
 
 #endif //TESOS_TIMER_H

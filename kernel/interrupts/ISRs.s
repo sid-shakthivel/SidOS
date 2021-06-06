@@ -24,6 +24,8 @@ fnExceptionHandler%1:
     IRET
 %endmacro
 
+
+
 ; Exceptioms
 fnHandleException 0
 fnHandleException 1
@@ -56,8 +58,8 @@ global fnInterruptHandler32
 fnInterruptHandler32:
     CLD
     PUSHAD
-    extern pCurrentStack
-    MOV [pCurrentStack], ESP
+    extern pSavedStack
+    MOV [pSavedStack], ESP
     extern fnOnTimerInterrupt
     CALL fnOnTimerInterrupt
     extern pNextStack

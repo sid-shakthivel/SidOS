@@ -51,7 +51,7 @@ uint32_t *malloc(uint32_t u32Size) {
 	SFreeNode *pNewNode;
 	uint32_t *pu32MemoryAddress;
 
-	uint32_t u32OldSize;
+	uint32_t u32OldSize = 0;
 	if (pCurrentNode == NULL) {
 		pu32MemoryAddress = fnAllocPage();
 		pNewNode = fnSetFreeNode(pu32MemoryAddress, (4096 - (u32Size * 4 + sizeof(SFreeNode))), NULL, NULL, 1, u32Size);

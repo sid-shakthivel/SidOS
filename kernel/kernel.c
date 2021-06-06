@@ -51,30 +51,31 @@ void fnKernelMain(multiboot_info_t *pMBD)
 
 	fnInitialisePageFrameAllocator(u32StartOfMemory, fnCalculateMaximumMemory(pMBD));
 
-	uint32_t *test = malloc(sizeof(uint32_t) * 10);
+	fnInitialiseTasks();
 
-	fnPrintFreeList();
+	STask *pTaskOne = fnCreateNewTask("Task 1", fnTestFunc);
+	STask *pTaskTwo = fnCreateNewTask("Task 2", fnBestFunc);
 
-	uint32_t *best = malloc(sizeof(uint32_t) * 5);
+	fnSetupTimer(100);
 
-	fnPrintFreeList();
+//	fnReturnNewTask();
+//	fnReturnNewTask();
+//	fnReturnNewTask();
+//	fnReturnNewTask();
+//	fnReturnNewTask();
+//	fnReturnNewTask();
+//	fnReturnNewTask();
+//	fnReturnNewTask();
+//	fnReturnNewTask();
+//	fnReturnNewTask();
+//	fnReturnNewTask();
+//	fnReturnNewTask();
+//	fnReturnNewTask();
+//	fnReturnNewTask();
+//	fnReturnNewTask();
+//	fnReturnNewTask();
 
-	free(test);
+//	fnLoopThroughLinkedList();
 
-	fnPrintFreeList();
-
-	free(best);
-
-	fnPrintFreeList();
-
-	uint32_t *hest = malloc(sizeof(uint32_t) * 5);
-
-	fnPrintFreeList();
-
-//	STask *pTaskOne = fnCreateNewTask("Task 1", fnTestFunc);
-//	STask *pTaskTwo = fnCreateNewTask("Task 2", fnBestFunc);
-//
-//	fnSetupTimter(100, pTaskOne, pTaskTwo);
-//
-//	fnClearMaskOfIRQ(0x00);
+	fnClearMaskOfIRQ(0x00);
 }

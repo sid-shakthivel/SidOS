@@ -9,43 +9,28 @@
 #include "../include/vga_text.h"
 #include "../include/task.h"
 #include "../include/pic.h"
+#include "../include/memory.h"
 
-STask *pTaskOne;
-STask *pTaskTwo;
-int i = 0;
-
-uint32_t *pCurrentStack;
-uint32_t *pOldStack;
+uint32_t *pSavedStack;
 uint32_t *pNextStack;
 
-// TODO: Fix the task1, task2 thing
-void fnSetupTimter(uint32_t u32Hertz, STask *task1, STask *task2)
+STask *pOldTask;
+
+void fnSetupTimer(uint32_t u32Hertz)
 {
 	u32Hertz = 1193180 / u32Hertz;
 	fnOutB(0x43, 0x36);
 	fnOutB(0x40, u32Hertz & 0xFF);
 	fnOutB(0x40, u32Hertz >> 8);
-
-	pTaskOne = task1;
-	pTaskTwo = task2;
 }
 
 void fnOnTimerInterrupt(void)
 {
-	if (i == 0)
-	{
-		pNextStack = pTaskOne->pu32ESP;
+	STask *pTask = fnReturnNewTask();
+	if(pOldTask != NULL) {
+		pOldTask->pu32ESP = pSavedStack;
 	}
-	else if (i == 1)
-	{
-		pNextStack = pTaskTwo->pu32ESP;
-	}
-	else
-	{
-		pNextStack = pOldStack;
-	}
-
+	pNextStack = pTask->pu32ESP;
+	pOldTask = pTask;
 	fnSendPICAcknowledgement(0x20);
-	i++;
-	pOldStack = pCurrentStack;
 }

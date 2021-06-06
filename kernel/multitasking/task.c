@@ -7,11 +7,18 @@
 #include "../include/page_frame_allocator.h"
 #include "../include/string.h"
 #include "../include/vga_text.h"
+#include "../include/memory.h"
+
+SLinkedList *LinkedListOfTasks;
+STask *pCurrentTask;
+
+void fnInitialiseTasks() {
+	LinkedListOfTasks = (SLinkedList *) malloc(sizeof(SLinkedList));
+}
 
 STask *fnCreateNewTask(char *szName, int(*fnFunc)())
 {
-	printf("SIZE OF TASK IS %x\n", sizeof(STask));
-	STask *pNewTask = (STask *)fnAllocPage();
+	STask *pNewTask = (STask *) malloc(sizeof(STask));
 	pNewTask->szName = szName;
 
 	uint32_t *pu32ESP = (uint32_t *)fnAllocPage() + 512;
@@ -35,8 +42,41 @@ STask *fnCreateNewTask(char *szName, int(*fnFunc)())
 	*(--pu32ESP) = 0; // ESI
 	*(--pu32ESP) = 0; // EDI
 
+	if (LinkedListOfTasks->u32Length == 0) {
+		LinkedListOfTasks->pHead = pNewTask;
+		LinkedListOfTasks->pTail = pNewTask;
+	} else {
+		pNewTask->pNext = NULL;
+		pNewTask->pPrevious = LinkedListOfTasks->pTail;
+		LinkedListOfTasks->pTail->pNext = pNewTask;
+		LinkedListOfTasks->pTail = pNewTask;
+	}
+
+	LinkedListOfTasks->u32Length++;
+
+	pCurrentTask = LinkedListOfTasks->pHead->pNext;
+
 	return pNewTask;
 }
 
+STask *fnReturnNewTask() {
+	if (pCurrentTask->pNext == NULL) {
+		pCurrentTask = LinkedListOfTasks->pHead;
+	} else {
+		pCurrentTask = pCurrentTask->pNext;
+	}
+//	printf("TASK IS ");
+//	printf(pCurrentTask->szName);
+//	printf("\n");
+	return pCurrentTask;
+}
 
+void fnLoopThroughLinkedList() {
+	STask *pCurrent = LinkedListOfTasks->pHead;
+	while (pCurrent != NULL) {
+		printf(pCurrent->szName);
+		printf("\n");
+		pCurrent = pCurrent->pNext;
+	}
+}
 
