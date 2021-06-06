@@ -63,6 +63,7 @@ fnInterruptHandler32:
     extern fnOnTimerInterrupt
     CALL fnOnTimerInterrupt
     extern pNextStack
+    xchg bx, bx
     MOV ESP, [pNextStack]
     POPAD
     IRET

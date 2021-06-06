@@ -9,6 +9,7 @@ typedef struct STask
 	uint32_t *pu32ESP;
 	struct STask *pNext;
 	struct STask *pPrevious;
+	char *szStatus;
 } STask;
 
 typedef struct SLinkedList {
@@ -26,5 +27,7 @@ void fnInitialiseTasks();
 STask *fnReturnNewTask();
 
 void fnLoopThroughLinkedList();
+
+void fnDeleteTask(char *szName);
 
 #endif

@@ -8,6 +8,7 @@
 #include "../include/string.h"
 #include "../include/vga_text.h"
 #include "../include/memory.h"
+#include "../include/string.h"
 
 SLinkedList *LinkedListOfTasks;
 STask *pCurrentTask;
@@ -65,10 +66,19 @@ STask *fnReturnNewTask() {
 	} else {
 		pCurrentTask = pCurrentTask->pNext;
 	}
-//	printf("TASK IS ");
-//	printf(pCurrentTask->szName);
-//	printf("\n");
 	return pCurrentTask;
+}
+
+void fnDeleteTask(char *szName) {
+	STask *pCurrentTask = LinkedListOfTasks->pHead;
+	while (pCurrentTask != NULL) {
+		if (strcmp(szName, pCurrentTask->szName)) {
+			pCurrentTask->pPrevious->pNext = pCurrentTask->pNext;
+			pCurrentTask->pNext->pPrevious = pCurrentTask->pPrevious;
+			free((uint32_t *)pCurrentTask);
+		}
+		pCurrentTask = pCurrentTask->pNext;
+	}
 }
 
 void fnLoopThroughLinkedList() {

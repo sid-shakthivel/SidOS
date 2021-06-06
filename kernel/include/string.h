@@ -6,6 +6,7 @@
 #include <stdint.h>
 #include <stdarg.h>
 
-uint32_t strlen(uint8_t *szString);
+uint32_t strlen(char *szString);
+bool strcmp(char *szStringOne, char *szStringTwo);
 
 #endif

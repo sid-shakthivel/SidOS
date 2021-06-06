@@ -6,4 +6,6 @@
 
 void fnSetupTimer(uint32_t u32Hertz);
 
+extern STask *pOldTask;
+
 #endif //TESOS_TIMER_H

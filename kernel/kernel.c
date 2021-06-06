@@ -18,25 +18,21 @@
 
 #define PORT 0x3f8 // COM1
 
-extern void stack_stuff();
-
 int fnTestFunc()
 {
 	printf("TEST\n");
-	while (true)
-	{
-		//		Do stuff
+	while (true) {
 	}
+//	fnDeleteTask(pOldTask->szName);
 	return 0;
 }
 
 int fnBestFunc()
 {
 	printf("BEST\n");
-	while (true)
-	{
-		//		Do stuff
+	while (true) {
 	}
+//	fnDeleteTask(pOldTask->szName);
 	return 0;
 }
 
@@ -58,24 +54,7 @@ void fnKernelMain(multiboot_info_t *pMBD)
 
 	fnSetupTimer(100);
 
-//	fnReturnNewTask();
-//	fnReturnNewTask();
-//	fnReturnNewTask();
-//	fnReturnNewTask();
-//	fnReturnNewTask();
-//	fnReturnNewTask();
-//	fnReturnNewTask();
-//	fnReturnNewTask();
-//	fnReturnNewTask();
-//	fnReturnNewTask();
-//	fnReturnNewTask();
-//	fnReturnNewTask();
-//	fnReturnNewTask();
-//	fnReturnNewTask();
-//	fnReturnNewTask();
-//	fnReturnNewTask();
-
-//	fnLoopThroughLinkedList();
-
 	fnClearMaskOfIRQ(0x00);
+
+	printf("DOES EXECUTION REACH HERE?\n");
 }

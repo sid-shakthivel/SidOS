@@ -22,7 +22,7 @@ void fnWriteSerial(uint8_t u8a)
     fnOutB(ku32Port, u8a);
 }
 
-void fnWriteStringToSerial(uint8_t *szString)
+void fnWriteStringToSerial(char *szString)
 {
     uint32_t u32Length = strlen(szString);
 

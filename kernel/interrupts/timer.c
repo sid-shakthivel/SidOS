@@ -10,9 +10,12 @@
 #include "../include/task.h"
 #include "../include/pic.h"
 #include "../include/memory.h"
+#include "../include/string.h"
 
 uint32_t *pSavedStack;
 uint32_t *pNextStack;
+
+uint32_t *pSavedKernelStackESP;
 
 STask *pOldTask;
 
@@ -27,10 +30,16 @@ void fnSetupTimer(uint32_t u32Hertz)
 void fnOnTimerInterrupt(void)
 {
 	STask *pTask = fnReturnNewTask();
+
 	if(pOldTask != NULL) {
 		pOldTask->pu32ESP = pSavedStack;
+	} else {
+		printf("SAVING KERNEL STACK\n");
+		pSavedKernelStackESP = pSavedStack;
 	}
+
 	pNextStack = pTask->pu32ESP;
 	pOldTask = pTask;
+
 	fnSendPICAcknowledgement(0x20);
 }
