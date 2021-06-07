@@ -60,10 +60,11 @@ fnInterruptHandler32:
     PUSHAD
     extern pSavedStack
     MOV [pSavedStack], ESP
+    ;xchg bx, bx
     extern fnOnTimerInterrupt
     CALL fnOnTimerInterrupt
+    ;xchg bx, bx
     extern pNextStack
-    xchg bx, bx
     MOV ESP, [pNextStack]
     POPAD
     IRET

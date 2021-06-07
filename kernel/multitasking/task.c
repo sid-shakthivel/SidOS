@@ -21,6 +21,7 @@ STask *fnCreateNewTask(char *szName, int(*fnFunc)())
 {
 	STask *pNewTask = (STask *) malloc(sizeof(STask));
 	pNewTask->szName = szName;
+	pNewTask->szStatus = "STARTED";
 
 	uint32_t *pu32ESP = (uint32_t *)fnAllocPage() + 512;
 	pNewTask->pu32ESP = (uint32_t *)pu32ESP - 14;
@@ -61,6 +62,10 @@ STask *fnCreateNewTask(char *szName, int(*fnFunc)())
 }
 
 STask *fnReturnNewTask() {
+	if (LinkedListOfTasks->u32Length <= 1) {
+		return NULL;
+	}
+
 	if (pCurrentTask->pNext == NULL) {
 		pCurrentTask = LinkedListOfTasks->pHead;
 	} else {
@@ -70,7 +75,24 @@ STask *fnReturnNewTask() {
 }
 
 void fnDeleteTask(char *szName) {
-	STask *pCurrentTask = LinkedListOfTasks->pHead;
+	--LinkedListOfTasks->u32Length;
+
+	STask *pCurrentTask = LinkedListOfTasks->pHead->pNext;
+
+	if (strcmp(LinkedListOfTasks->pHead->szName, szName)) {
+		STask *pOldHead = LinkedListOfTasks->pHead;
+		LinkedListOfTasks->pHead = LinkedListOfTasks->pHead->pNext;
+		LinkedListOfTasks->pHead->pPrevious = NULL;
+		free((uint32_t *)pOldHead);
+		return;
+	}
+
+	if (strcmp(LinkedListOfTasks->pTail->szName, szName)) {
+		LinkedListOfTasks->pTail = LinkedListOfTasks->pTail->pPrevious;
+		free((uint32_t *)pCurrentTask);
+		return;
+	}
+
 	while (pCurrentTask != NULL) {
 		if (strcmp(szName, pCurrentTask->szName)) {
 			pCurrentTask->pPrevious->pNext = pCurrentTask->pNext;

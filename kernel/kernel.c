@@ -15,24 +15,23 @@
 #include "include/timer.h"
 #include "include/task.h"
 #include "include/memory.h"
+#include "include/string.h"
 
 #define PORT 0x3f8 // COM1
 
 int fnTestFunc()
 {
 	printf("TEST\n");
-	while (true) {
-	}
-//	fnDeleteTask(pOldTask->szName);
+		pOldTask->szStatus = "STOP";
+		asm volatile ("int $0x20");
 	return 0;
 }
 
 int fnBestFunc()
 {
 	printf("BEST\n");
-	while (true) {
-	}
-//	fnDeleteTask(pOldTask->szName);
+	pOldTask->szStatus = "STOP";
+	asm volatile ("int $0x20");
 	return 0;
 }
 

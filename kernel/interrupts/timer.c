@@ -32,13 +32,21 @@ void fnOnTimerInterrupt(void)
 	STask *pTask = fnReturnNewTask();
 
 	if(pOldTask != NULL) {
-		pOldTask->pu32ESP = pSavedStack;
+		if (strcmp(pOldTask->szStatus, "STOP") == 1) {
+			fnDeleteTask(pOldTask->szName);
+		} else {
+			pOldTask->pu32ESP = pSavedStack;
+		}
 	} else {
-		printf("SAVING KERNEL STACK\n");
 		pSavedKernelStackESP = pSavedStack;
 	}
 
-	pNextStack = pTask->pu32ESP;
+	if (pTask == NULL) {
+		pNextStack = pSavedKernelStackESP;
+	} else {
+		pNextStack = pTask->pu32ESP;
+	}
+
 	pOldTask = pTask;
 
 	fnSendPICAcknowledgement(0x20);
