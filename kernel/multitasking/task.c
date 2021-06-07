@@ -9,6 +9,7 @@
 #include "../include/vga_text.h"
 #include "../include/memory.h"
 #include "../include/string.h"
+#include "../include/timer.h"
 
 SLinkedList *LinkedListOfTasks;
 STask *pCurrentTask;
@@ -112,3 +113,7 @@ void fnLoopThroughLinkedList() {
 	}
 }
 
+void fnExit() {
+	pOldTask->szStatus = "STOP";
+	asm volatile ("int $0x20");
+}

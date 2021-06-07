@@ -22,16 +22,14 @@
 int fnTestFunc()
 {
 	printf("TEST\n");
-		pOldTask->szStatus = "STOP";
-		asm volatile ("int $0x20");
+	fnExit();
 	return 0;
 }
 
 int fnBestFunc()
 {
 	printf("BEST\n");
-	pOldTask->szStatus = "STOP";
-	asm volatile ("int $0x20");
+	fnExit();
 	return 0;
 }
 

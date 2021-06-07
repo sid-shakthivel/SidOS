@@ -30,4 +30,6 @@ void fnLoopThroughLinkedList();
 
 void fnDeleteTask(char *szName);
 
+void fnExit();
+
 #endif
