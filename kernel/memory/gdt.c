@@ -34,7 +34,7 @@ void fnSetGDTEntry(uint32_t u32Num, uint32_t u32base, uint32_t u32Limit, uint8_t
 void fnInitialiseGDT(void)
 {
 	fnSetGDTEntry(0, 0, 0, 0, 0);                // Null Descriptor
-	fnSetGDTEntry(1, 0, 0xFFFFFFFF, 0x9A, 0xCF); // Code Entry (kernel)
+	fnSetGDTEntry(1, 0, 0xFFFFFFFF, 0x9A, 0xCF); // Code Entry (kernel mode)
 	fnSetGDTEntry(2, 0, 0xFFFFFFFF, 0x92, 0xCF); // Data Entry (kernel mode)
 	fnSetGDTEntry(3, 0, 0xFFFFFFFF, 0xFA, 0xCF); // Code Entry (user mode)
 	fnSetGDTEntry(4, 0, 0xFFFFFFFF, 0xF2, 0xCF); // Data Entry (user mode)

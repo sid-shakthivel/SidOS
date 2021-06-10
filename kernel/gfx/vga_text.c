@@ -77,14 +77,20 @@ void printf(char *szString, ...)
 
         switch (*++pcCharacter)
         {
-        case 'd':
-            fnPrintNumber(va_arg(valist, uint32_t), 10);
-            break;
-        case 'x':
-            fnPrintCharacter('0');
-            fnPrintCharacter('x');
-            fnPrintNumber(va_arg(valist, uint32_t), 16);
-            break;
+        	case 'o':
+				fnPrintNumber(va_arg(valist, uint32_t), 8);
+				break;
+        	case 's':
+				printf(va_arg(valist, char *));
+				break;
+			case 'd':
+				fnPrintNumber(va_arg(valist, uint32_t), 10);
+				break;
+			case 'x':
+				fnPrintCharacter('0');
+				fnPrintCharacter('x');
+				fnPrintNumber(va_arg(valist, uint32_t), 16);
+				break;
         }
     }
 
@@ -150,6 +156,8 @@ uint32_t fnPrintNumber(uint32_t u32Number, uint32_t u32NumericBase)
     {
         if (u32NumericBase == 10)
             fnPrintCharacter(u32Number + '0');
+        if (u32NumericBase == 8)
+			fnPrintCharacter(u32Number + '0');
         else if (u32NumericBase == 16)
             fnPrintCharacter(rgcHexArray[u32Number]);
     }

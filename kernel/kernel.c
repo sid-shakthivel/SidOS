@@ -16,6 +16,7 @@
 #include "include/task.h"
 #include "include/memory.h"
 #include "include/string.h"
+#include "include/filesystem.h"
 
 #define PORT 0x3f8 // COM1
 
@@ -40,18 +41,26 @@ void fnKernelMain(multiboot_info_t *pMBD)
 	fnInitialiseGDT();
 	fnInitaliseIDT();
 	fnInitialisePIC();
+
+//	TODO: Fix the whole pMBD->mods_addr not being 1093632 thing
+	fnParseTar(1093632);
+	fnPrintFileContents(rgfFileSystem[0]);
+	fnPrintFileContents(rgfFileSystem[1]);
+
 	uint32_t u32StartOfMemory = fnInitialisePaging();
 
 	fnInitialisePageFrameAllocator(u32StartOfMemory, fnCalculateMaximumMemory(pMBD));
 
 	fnInitialiseTasks();
 
+	fnSetupTimer(100);
+
+//	fnClearMaskOfIRQ(0x00);
+
 	STask *pTaskOne = fnCreateNewTask("Task 1", fnTestFunc);
 	STask *pTaskTwo = fnCreateNewTask("Task 2", fnBestFunc);
 
-	fnSetupTimer(100);
-
-	fnClearMaskOfIRQ(0x00);
-
-	printf("DOES EXECUTION REACH HERE?\n");
+	pTaskOne = pTaskOne;
+	pTaskTwo = pTaskTwo;
 }
+

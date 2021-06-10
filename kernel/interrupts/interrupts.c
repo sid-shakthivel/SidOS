@@ -8,7 +8,7 @@
 #include "../include/pic.h"
 #include "../include/timer.h"
 
-char *rgszExceptions[31] = {"One Cannot Divide 0 By 0\n", "Single-step interrupt\n", "NMI\n", "Breakpoint\n", "Overflow\n", "Bounds\n", "Invalid Opcode\n", "Coprocessor Not Available\n", "Double Fault\n", "Coprocessor Segment Overrun\n", "Invalid Task State Segment\n", "Segment Not Present\n", "Stack Fault\n", "General Protection Fault\n", "Page fault\n", "Reserved\n", "Math Fault\n", "Alignment Check\n", "Machine Check\n", "SIMD Floating-Point Exception\n", "Virtualisation Exception\n", "Control Protection Exception\n"};
+char *rgfszExceptions[31] = {"One Cannot Divide 0 By 0\n", "Single-step interrupt\n", "NMI\n", "Breakpoint\n", "Overflow\n", "Bounds\n", "Invalid Opcode\n", "Coprocessor Not Available\n", "Double Fault\n", "Coprocessor Segment Overrun\n", "Invalid Task State Segment\n", "Segment Not Present\n", "Stack Fault\n", "General Protection Fault\n", "Page fault\n", "Reserved\n", "Math Fault\n", "Alignment Check\n", "Machine Check\n", "SIMD Floating-Point Exception\n", "Virtualisation Exception\n", "Control Protection Exception\n"};
 
 typedef struct SRegisters
 {
@@ -37,7 +37,7 @@ void fnPrintRegisters(SRegisters Registers)
 
 void fnOnGenericException(SRegisters Registers, uint32_t u32IRQNumber)
 {
-	u32IRQNumber > 0x15 ? printf("Intel Reserved\n") : printf(rgszExceptions[u32IRQNumber]);
+	u32IRQNumber > 0x15 ? printf("Intel Reserved\n") : printf(rgfszExceptions[u32IRQNumber]);
 	Registers = Registers;
 	// print_registers(registers_t);
 }
