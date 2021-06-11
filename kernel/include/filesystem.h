@@ -13,7 +13,7 @@ typedef struct STarHeader {
 	char szGID[8];
 	char szSize[12];
 	char szLastMod[12];
-	char szChecksum[12];
+	char szChecksum[8];
 	char szLinkIndicator[1];
 	uint32_t u32Address;
 } STarHeader;

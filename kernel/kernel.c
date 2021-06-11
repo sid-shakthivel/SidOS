@@ -44,8 +44,12 @@ void fnKernelMain(multiboot_info_t *pMBD)
 
 //	TODO: Fix the whole pMBD->mods_addr not being 1093632 thing
 	fnParseTar(1093632);
-	fnPrintFileContents(rgfFileSystem[0]);
-	fnPrintFileContents(rgfFileSystem[1]);
+
+	int i = 0;
+	while(rgfFileSystem[i] != NULL) {
+//		fnPrintFileContents(rgfFileSystem[i]);
+		i++;
+	}
 
 	uint32_t u32StartOfMemory = fnInitialisePaging();
 

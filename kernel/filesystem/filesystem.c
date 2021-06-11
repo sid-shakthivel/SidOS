@@ -10,11 +10,11 @@
 STarHeader *rgfFileSystem[16];
 
 uint32_t fnCalculateSize(char *pSize) {
-	uint32_t u32Total = 0;
-	for (int i = 0; i < 11; i++) {
-		u32Total += *(pSize + i);
-	}
-	return u32Total;
+	uint32_t u32Size = 0;
+	int count = 1;
+	for (int j = 11; j > 0; j--, count *= 8)
+		u32Size += ((pSize[j - 1] - '0') * count);
+	return u32Size;
 }
 
 void fnParseTar(uint32_t address) {
@@ -27,11 +27,20 @@ void fnParseTar(uint32_t address) {
 		if (pHeader->szFilename[0] == '\0')
 			break;
 
-		rgfFileSystem[i] = pHeader;
-
 		uint32_t u32Size = fnCalculateSize(pHeader->szSize);
 
+		printf("%s ", pHeader->szFilename);
+
+		if (u32Size == 0) {
+			printf("ITS A FOLDER\n");
+		} else {
+			printf("ITS A FILE\n");
+		};
+
 		address += ((u32Size / 512) + 1) * 512;
+
+		if (u32Size % 512)
+			address += 512;
 
 		i++;
 	}
