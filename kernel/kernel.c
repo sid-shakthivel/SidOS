@@ -42,24 +42,22 @@ void fnKernelMain(multiboot_info_t *pMBD)
 	fnInitaliseIDT();
 	fnInitialisePIC();
 
-//	TODO: Fix the whole pMBD->mods_addr not being 1093632 thing
-	fnParseTar(1093632);
-
-	int i = 0;
-	while(rgfFileSystem[i] != NULL) {
-//		fnPrintFileContents(rgfFileSystem[i]);
-		i++;
-	}
+	//	TODO: Fix the whole pMBD->mods_addr not being 1093632 thing
+	uint32_t u32EndOfTarFile = fnCalculateTarFileSize(1093632);
 
 	uint32_t u32StartOfMemory = fnInitialisePaging();
 
+	printf("TAR BALL TAKES %d\n", u32EndOfTarFile - 1093632);
+
 	fnInitialisePageFrameAllocator(u32StartOfMemory, fnCalculateMaximumMemory(pMBD));
+
+	fnInitialiseFilesystem();
 
 	fnInitialiseTasks();
 
 	fnSetupTimer(100);
 
-//	fnClearMaskOfIRQ(0x00);
+	//	fnClearMaskOfIRQ(0x00);
 
 	STask *pTaskOne = fnCreateNewTask("Task 1", fnTestFunc);
 	STask *pTaskTwo = fnCreateNewTask("Task 2", fnBestFunc);
@@ -67,4 +65,3 @@ void fnKernelMain(multiboot_info_t *pMBD)
 	pTaskOne = pTaskOne;
 	pTaskTwo = pTaskTwo;
 }
-

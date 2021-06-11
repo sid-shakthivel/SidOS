@@ -6,7 +6,8 @@
 #include <stdint.h>
 #include <stdarg.h>
 
-typedef struct STarHeader {
+typedef struct STarHeader
+{
 	char szFilename[100];
 	char szFileMode[8];
 	char szUID[8];
@@ -15,13 +16,20 @@ typedef struct STarHeader {
 	char szLastMod[12];
 	char szChecksum[8];
 	char szLinkIndicator[1];
+	char szIsFile; // 0 for file and 1 for directory
 	uint32_t u32Address;
+	struct STarHeader *pNextHeader;
+	struct STarHeader *pPreviousHeader;
 } STarHeader;
 
-extern STarHeader *rgfFileSystem[16];
+extern STarHeader *rgfFileSystem[32];
 
 void fnParseTar(uint32_t address);
 
 void fnPrintFileContents(STarHeader *pHeader);
+
+void fnInitialiseFilesystem();
+
+uint32_t fnCalculateTarFileSize(uint32_t u32Address);
 
 #endif //TESOS_FILESYSTEM_H

@@ -45,7 +45,7 @@ void fnIdentityMap(void)
 
 	// Setup Page Tables - Map All Physical Addresses To Virtual Ones
 
-	for (uint32_t u32CurrentPageFrame = 0; u32CurrentPageFrame < 0x00000000021acfff; u32CurrentPageFrame+=1024)
+	for (uint32_t u32CurrentPageFrame = 0; u32CurrentPageFrame < 0x00000000021acfff; u32CurrentPageFrame += 1024)
 	{
 		uint32_t *pu32Index = (uint32_t *)pu32rgPageTables + (u32CurrentPageFrame / 4096);
 		fnSetEntry(pu32Index, u32CurrentPageFrame, 1, 1);
