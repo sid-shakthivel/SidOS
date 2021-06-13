@@ -8,24 +8,28 @@
 
 uint32_t strlen(char *szString)
 {
-    uint32_t i = 0;
-    while (szString[i] != '\0')
-    {
-        i++;
-    }
-    return i;
+	uint32_t i = 0;
+	while (szString[i] != '\0')
+	{
+		i++;
+	}
+	return i;
 }
 
-bool strcmp(char *pcStringOne, char *pcStringTwo) {
+bool strcmp(char *pcStringOne, char *pcStringTwo)
+{
 	uint32_t u32LengthOfStringOne = strlen(pcStringOne);
 	uint32_t u32LengthOfStringTwo = strlen(pcStringTwo);
 
-	if (u32LengthOfStringOne != u32LengthOfStringTwo) {
+	if (u32LengthOfStringOne != u32LengthOfStringTwo)
+	{
 		return false;
 	}
 
-	for (uint32_t i = 0; i < u32LengthOfStringOne; i++) {
-		if (pcStringOne[i] != pcStringTwo[i]) {
+	for (uint32_t i = 0; i < u32LengthOfStringOne; i++)
+	{
+		if (pcStringOne[i] != pcStringTwo[i])
+		{
 			return false;
 		}
 	}
@@ -34,8 +38,19 @@ bool strcmp(char *pcStringOne, char *pcStringTwo) {
 }
 
 // src, dest
-void strcpy(char *pcStringOne, char *pcStringTwo, uint32_t u32Size) {
-	for (uint32_t i = 0; i < u32Size; i++) {
+void strcpy(char *pcStringOne, char *pcStringTwo, uint32_t u32Size)
+{
+	for (uint32_t i = 0; i < u32Size; i++)
+	{
 		pcStringTwo[i] = pcStringOne[i];
 	}
+}
+
+void memcpy(void *pDest, void *pSrc, uint32_t u32Limit)
+{
+	char *prgcSrc = (char *)pSrc;
+	char *prgcDest = (char *)pDest;
+
+	for (uint32_t i = 0; i < u32Limit; i++)
+		prgcDest[i] = prgcSrc[i];
 }

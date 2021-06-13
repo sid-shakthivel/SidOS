@@ -9,5 +9,6 @@
 uint32_t strlen(char *szString);
 bool strcmp(char *pcStringOne, char *pcStringTwo);
 void strcpy(char *pcStringOne, char *pcStringTwo, uint32_t u32Size);
+void memcpy(void *pDest, void *pSrc, uint32_t u32Limit);
 
 #endif

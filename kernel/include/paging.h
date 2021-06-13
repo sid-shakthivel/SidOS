@@ -16,7 +16,7 @@ typedef struct SMultibootSegment
 	unsigned int uiType;
 } SMultibootSegment;
 
-uint32_t fnInitialisePaging(void);
+uint32_t fnInitialisePaging(uint32_t u32TarBallSize);
 uint32_t fnCalculateMaximumMemory(multiboot_info_t *pMBD);
 
 #endif

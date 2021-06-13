@@ -24,12 +24,10 @@ typedef struct STarHeader
 
 extern STarHeader *rgfFileSystem[32];
 
-void fnParseTar(uint32_t address);
-
 void fnPrintFileContents(STarHeader *pHeader);
 
-void fnInitialiseFilesystem();
+uint32_t fnEndOfTarBall(uint32_t address);
 
-uint32_t fnCalculateTarFileSize(uint32_t u32Address);
+void fnInitialiseFilesystem();
 
 #endif //TESOS_FILESYSTEM_H

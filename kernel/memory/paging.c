@@ -6,6 +6,7 @@
 #include "../include/paging.h"
 #include "../include/vga_text.h"
 #include "../include/multiboot.h"
+#include "../include/string.h"
 
 extern uint32_t __kernel_end;
 
@@ -52,17 +53,22 @@ void fnIdentityMap(void)
 	}
 }
 
-uint32_t fnInitialisePaging(void)
+uint32_t fnInitialisePaging(uint32_t u32SizeOfTarBall)
 {
+	uint32_t u32StartOfMemory = (uint32_t)&__kernel_end + (1024 * 4) + (1024 * 4 * 1024);
+
 	pu32rgPageDirectory = (uint32_t *)&__kernel_end;
 	pu32rgPageTables = pu32rgPageDirectory + u32PageSize;
 
 	fnIdentityMap();
 
 	fnLoadPageDirectory(pu32rgPageDirectory);
+
 	fnEnablePaging();
 
-	return (uint32_t)&__kernel_end + (1024 * 4) + (1024 * 4 * 1024);
+	printf("TAR BALL IS %d AND START OF MEMORY IS %d\n", u32SizeOfTarBall, u32StartOfMemory);
+
+	return u32StartOfMemory + u32SizeOfTarBall + 1;
 }
 
 uint32_t fnCalculateMaximumMemory(multiboot_info_t *pMBD)

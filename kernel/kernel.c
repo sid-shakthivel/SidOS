@@ -42,26 +42,51 @@ void fnKernelMain(multiboot_info_t *pMBD)
 	fnInitaliseIDT();
 	fnInitialisePIC();
 
-	//	TODO: Fix the whole pMBD->mods_addr not being 1093632 thing
-	uint32_t u32EndOfTarFile = fnCalculateTarFileSize(1093632);
+	//	TODO: Fix the whole pMBD->mods_addr not being correct
 
-	uint32_t u32StartOfMemory = fnInitialisePaging();
+	multiboot_module_t *pGrubModule = (multiboot_module_t *)pMBD->mods_addr;
+	uint32_t pModuleStartAddress = (uint32_t)pGrubModule->mod_start;
 
-	printf("TAR BALL TAKES %d\n", u32EndOfTarFile - 1093632);
+	uint32_t u32SizeOfTarBall = fnEndOfTarBall(pModuleStartAddress) - pModuleStartAddress;
+
+	memcpy((char *)5283840, (char *)pModuleStartAddress, u32SizeOfTarBall);
+
+	uint32_t u32StartOfMemory = fnInitialisePaging(u32SizeOfTarBall);
 
 	fnInitialisePageFrameAllocator(u32StartOfMemory, fnCalculateMaximumMemory(pMBD));
 
-	fnInitialiseFilesystem();
+	uint32_t work = fnEndOfTarBall(5283840);
 
-	fnInitialiseTasks();
+	// uint32_t address = 5283840;
 
-	fnSetupTimer(100);
+	// STarHeader *pHeader = (STarHeader *)5283840;
+	// if (pHeader->szFilename[0] == '\0')
+	// 	printf("ISSUE\n");
+	// else
+	// {
+	// 	printf("%s\n", pHeader->szFilename);
+	// 	uint32_t u32Size = fnCalculateSize(pHeader->szSize);
 
-	//	fnClearMaskOfIRQ(0x00);
+	// 	if (u32Size == 0)
+	// 		pHeader->szIsFile = 1 - '0';
 
-	STask *pTaskOne = fnCreateNewTask("Task 1", fnTestFunc);
-	STask *pTaskTwo = fnCreateNewTask("Task 2", fnBestFunc);
+	// 	address += ((u32Size / 512) + 1) * 512;
 
-	pTaskOne = pTaskOne;
-	pTaskTwo = pTaskTwo;
+	// 	if (u32Size % 512)
+	// 		address += 512;
+	// }
+
+	// fnInitialiseFilesystem();
+
+	//	 fnInitialiseTasks();
+
+	//	 fnSetupTimer(100);
+
+	//	 fnClearMaskOfIRQ(0x00);
+
+	//	 STask *pTaskOne = fnCreateNewTask("Task 1", fnTestFunc);
+	//	 STask *pTaskTwo = fnCreateNewTask("Task 2", fnBestFunc);
+	//
+	//	 pTaskOne = pTaskOne;
+	//	 pTaskTwo = pTaskTwo;
 }
