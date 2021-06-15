@@ -19,20 +19,15 @@ uint32_t fnCalculateSize(char *pSize)
 	return u32Size;
 }
 
-uint32_t fnEndOfTarBall(uint32_t address)
+uint32_t fnCalculateEndOfTarball(uint32_t address)
 {
+	int i = 0;
 	while (true)
 	{
-		char *test = (char *)address;
 		STarHeader *pHeader = (STarHeader *)address;
 
 		if (pHeader->szFilename[0] == '\0')
-		{
-			printf("ISSUE\n");
 			break;
-		}
-
-		printf("FILENAME IS %s\n", pHeader->szFilename);
 
 		pHeader->u32Address = address;
 
@@ -43,13 +38,39 @@ uint32_t fnEndOfTarBall(uint32_t address)
 
 		address += ((u32Size / 512) + 1) * 512;
 
+		rgfFileSystem[i] = pHeader;
+
 		if (u32Size % 512)
 			address += 512;
+
+		i++;
 	}
 	return address;
 }
 
 void fnInitialiseFilesystem()
 {
-	// Remove the backslashes at the end of folders
+	uint32_t i = 0;
+	STarHeader *pCurrentHeader;
+	uint32_t u32SizeOfString;
+	uint32_t u32LastSlash = 0;
+	while (rgfFileSystem[i] != NULL)
+	{
+		pCurrentHeader = rgfFileSystem[i];
+		u32SizeOfString = strlen(pCurrentHeader->szFilename);
+		if (pCurrentHeader->szFilename[u32SizeOfString - 1] == '/')
+			--u32SizeOfString;
+
+		u32LastSlash = 0;
+		for (uint32_t i = 0; i < u32SizeOfString; i++) {
+			if (pCurrentHeader->szFilename[i] == '/')
+				u32LastSlash = i;
+		}
+
+		char *filename = "";
+		substr(filename, pCurrentHeader->szFilename, i == 0 ? u32LastSlash : u32LastSlash+1, u32SizeOfString);
+		printf("FILENAME IS %s\n", filename);
+
+		i++;
+	}
 }

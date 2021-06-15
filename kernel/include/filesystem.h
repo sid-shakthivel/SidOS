@@ -26,7 +26,7 @@ extern STarHeader *rgfFileSystem[32];
 
 void fnPrintFileContents(STarHeader *pHeader);
 
-uint32_t fnEndOfTarBall(uint32_t address);
+uint32_t fnCalculateEndOfTarball(uint32_t address);
 
 void fnInitialiseFilesystem();
 

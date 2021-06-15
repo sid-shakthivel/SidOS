@@ -66,8 +66,6 @@ uint32_t fnInitialisePaging(uint32_t u32SizeOfTarBall)
 
 	fnEnablePaging();
 
-	printf("TAR BALL IS %d AND START OF MEMORY IS %d\n", u32SizeOfTarBall, u32StartOfMemory);
-
 	return u32StartOfMemory + u32SizeOfTarBall + 1;
 }
 

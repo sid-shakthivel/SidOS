@@ -3,7 +3,7 @@
 
 #include <stddef.h>
 
-void fnInitaliseTerminal(void);
+void fnInitialiseTerminal(void);
 void printf(char *szString, ...);
 void fnPrintCharacter(uint8_t u8Character);
 void fnDeleteCharacter(void);

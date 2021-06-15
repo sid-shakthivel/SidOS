@@ -38,12 +38,10 @@ bool strcmp(char *pcStringOne, char *pcStringTwo)
 }
 
 // src, dest
-void strcpy(char *pcStringOne, char *pcStringTwo, uint32_t u32Size)
+void strcpy(char *pcSrc, char *pcDest, uint32_t u32Size)
 {
 	for (uint32_t i = 0; i < u32Size; i++)
-	{
-		pcStringTwo[i] = pcStringOne[i];
-	}
+		pcDest[i] = pcSrc[i];
 }
 
 void memcpy(void *pDest, void *pSrc, uint32_t u32Limit)
@@ -54,3 +52,29 @@ void memcpy(void *pDest, void *pSrc, uint32_t u32Limit)
 	for (uint32_t i = 0; i < u32Limit; i++)
 		prgcDest[i] = prgcSrc[i];
 }
+
+void substr(char *pcDest, char *pcSrc, uint32_t u32Start, uint32_t u32End)
+{
+	uint32_t j = 0;
+	uint32_t i = u32Start;
+	while (i < u32End) {
+		pcDest[j] = pcSrc[i];
+		i++;
+		j++;
+	}
+	pcDest[j++] = '\0';
+}
+
+//void substr(char *destination, const char *source, int beg, int n)
+//{
+//	while (n > 0)
+//	{
+//		*destination = *(source + beg);
+//
+//		destination++;
+//		source++;
+//		n--;
+//	}
+//
+//	*destination = '\0';
+//}

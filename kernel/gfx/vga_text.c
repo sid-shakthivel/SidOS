@@ -43,7 +43,7 @@ void fnDeleteCharacter(void);
 uint8_t fnColourFormat(enum VGAColour BackgroundColour, enum VGAColour ForegroundColour);
 uint16_t fnVGAEntry(uint8_t u8Letter, uint8_t u8Colours);
 
-void fnInitaliseTerminal(void)
+void fnInitialiseTerminal(void)
 {
     pu16TerminalBuffer = (uint16_t *)0xB8000;
 
