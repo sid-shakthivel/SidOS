@@ -57,7 +57,8 @@ void substr(char *pcDest, char *pcSrc, uint32_t u32Start, uint32_t u32End)
 {
 	uint32_t j = 0;
 	uint32_t i = u32Start;
-	while (i < u32End) {
+	while (i < u32End)
+	{
 		pcDest[j] = pcSrc[i];
 		i++;
 		j++;

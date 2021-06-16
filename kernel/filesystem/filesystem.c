@@ -29,7 +29,7 @@ uint32_t fnCalculateEndOfTarball(uint32_t address)
 		if (pHeader->szFilename[0] == '\0')
 			break;
 
-		pHeader->u32Address = address;
+		pHeader->u32Index = 0;
 
 		uint32_t u32Size = fnCalculateSize(pHeader->szSize);
 
@@ -48,6 +48,18 @@ uint32_t fnCalculateEndOfTarball(uint32_t address)
 	return address;
 }
 
+uint32_t fnGetIndexOfFilesystem(char *name)
+{
+	uint32_t i = 0;
+	while (rgfFileSystem[i] != NULL)
+	{
+		if (strcmp(name, rgfFileSystem[i]->szFormattedFilename))
+			break;
+		i++;
+	}
+	return i;
+}
+
 void fnInitialiseFilesystem()
 {
 	uint32_t i = 0;
@@ -55,7 +67,6 @@ void fnInitialiseFilesystem()
 	uint32_t u32SizeOfString;
 	uint32_t u32LastSlash = 0;
 	uint32_t u32PreviousSlash = 0;
-	// uint32_t u32CurrentStringIndex = 0;
 	while (rgfFileSystem[i] != NULL)
 	{
 		pCurrentHeader = rgfFileSystem[i];
@@ -65,32 +76,32 @@ void fnInitialiseFilesystem()
 
 		u32LastSlash = 0;
 		for (uint32_t i = 0; i < u32SizeOfString; ++i)
-		{
 			if (pCurrentHeader->szFilename[i] == '/')
 				u32LastSlash = i;
-		}
 
-		char *filename = "";
-		substr(filename, pCurrentHeader->szFilename, i == 0 ? u32LastSlash : u32LastSlash + 1, u32SizeOfString);
-
-		printf("FILENAME IS %s\n", pCurrentHeader->szFilename);
-
-		STarHeaderNode *pTarHeaderNode;
-		pTarHeaderNode->pcFilename = "";
-		strcpy(filename, pTarHeaderNode->pcFilename, strlen(filename));
+		substr(rgfFileSystem[i]->szFormattedFilename, pCurrentHeader->szFilename, i == 0 ? u32LastSlash : u32LastSlash + 1, u32SizeOfString);
 
 		if (i != 0 && pCurrentHeader->u8IsFile == 1)
 			u32LastSlash -= 1;
 
 		for (uint32_t i = u32LastSlash; i > 0; --i)
-		{
 			if (pCurrentHeader->szFilename[i] == '/')
 				u32PreviousSlash = i;
+
+		if (i != 0 && pCurrentHeader->u8IsFile == 1)
+			u32LastSlash += 1;
+
+		char *filename = "";
+
+		substr(filename, pCurrentHeader->szFilename, pCurrentHeader->u8IsFile == 1 ? u32PreviousSlash : u32PreviousSlash + 1, u32LastSlash);
+
+		if (i != 0)
+		{
+			STarHeader *pPreviousHeader = rgfFileSystem[fnGetIndexOfFilesystem(filename)];
+			pCurrentHeader->pPreviousHeader = pPreviousHeader;
+			pPreviousHeader->pNextHeader[pPreviousHeader->u32Index] = pCurrentHeader;
+			pPreviousHeader->u32Index += 1;
 		}
-
-		substr(filename, pCurrentHeader->szFilename, u32PreviousSlash, u32LastSlash);
-
-		printf("I IS %d AND PREVIOUS FILENAME IS %s\n", u32PreviousSlash, filename);
 
 		i++;
 	}

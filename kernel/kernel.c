@@ -61,7 +61,7 @@ void fnKernelMain(multiboot_info_t *pMBD)
 
 	fnSetupTimer(100);
 
-//  fnClearMaskOfIRQ(0x00);
+	//  fnClearMaskOfIRQ(0x00);
 
 	STask *pTaskOne = fnCreateNewTask("Task 1", fnTestFunc);
 	STask *pTaskTwo = fnCreateNewTask("Task 2", fnBestFunc);
