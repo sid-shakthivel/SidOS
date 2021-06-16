@@ -57,6 +57,8 @@ void fnKernelMain(multiboot_info_t *pMBD)
 
 	fnInitialiseFilesystem();
 
+	printf("IN %s: %s and %s\n", pRootFolder->szFormattedFilename, pRootFolder->pNextHeader[0]->szFormattedFilename, pRootFolder->pNextHeader[1]->szFormattedFilename);
+
 	fnInitialiseTasks();
 
 	fnSetupTimer(100);

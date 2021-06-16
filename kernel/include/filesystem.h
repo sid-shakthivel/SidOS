@@ -17,16 +17,15 @@ typedef struct STarHeader
 	char szChecksum[8];
 	char szLinkIndicator[1];
 	uint8_t u8IsFile; // 0 for file and 1 for directory
-	struct STarHeader **pNextHeader;
+	struct STarHeader *pNextHeader[100];
 	struct STarHeader *pPreviousHeader;
 	char szFormattedFilename[100];
 	uint32_t u32Index;
 } STarHeader;
 
 extern STarHeader *rgfFileSystem[32];
-void fnPrintFileContents(STarHeader *pHeader);
+extern STarHeader *pRootFolder;
 uint32_t fnCalculateEndOfTarball(uint32_t address);
 void fnInitialiseFilesystem();
-uint32_t fnGetIndex(char *name);
 
 #endif //TESOS_FILESYSTEM_H

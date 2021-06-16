@@ -9,6 +9,7 @@
 #include "../include/memory.h"
 
 STarHeader *rgfFileSystem[32];
+STarHeader *pRootFolder;
 
 uint32_t fnCalculateSize(char *pSize)
 {
@@ -102,6 +103,8 @@ void fnInitialiseFilesystem()
 			pPreviousHeader->pNextHeader[pPreviousHeader->u32Index] = pCurrentHeader;
 			pPreviousHeader->u32Index += 1;
 		}
+		else
+			pRootFolder = pCurrentHeader;
 
 		i++;
 	}
