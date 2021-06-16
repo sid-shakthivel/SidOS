@@ -16,11 +16,17 @@ typedef struct STarHeader
 	char szLastMod[12];
 	char szChecksum[8];
 	char szLinkIndicator[1];
-	char szIsFile; // 0 for file and 1 for directory
+	uint8_t u8IsFile; // 0 for file and 1 for directory
 	uint32_t u32Address;
-	struct STarHeader *pNextHeader;
-	struct STarHeader *pPreviousHeader;
 } STarHeader;
+
+typedef struct STarHeaderNode
+{
+	struct STarHeader **pNextHeader;
+	struct STarHeader *pPreviousHeader;
+	char *pcFilename;
+	char szIsFile[1];
+} STarHeaderNode;
 
 extern STarHeader *rgfFileSystem[32];
 

@@ -34,7 +34,7 @@ uint32_t fnCalculateEndOfTarball(uint32_t address)
 		uint32_t u32Size = fnCalculateSize(pHeader->szSize);
 
 		if (u32Size == 0)
-			pHeader->szIsFile = 1 - '0';
+			pHeader->u8IsFile = 1;
 
 		address += ((u32Size / 512) + 1) * 512;
 
@@ -54,6 +54,8 @@ void fnInitialiseFilesystem()
 	STarHeader *pCurrentHeader;
 	uint32_t u32SizeOfString;
 	uint32_t u32LastSlash = 0;
+	uint32_t u32PreviousSlash = 0;
+	// uint32_t u32CurrentStringIndex = 0;
 	while (rgfFileSystem[i] != NULL)
 	{
 		pCurrentHeader = rgfFileSystem[i];
@@ -62,14 +64,33 @@ void fnInitialiseFilesystem()
 			--u32SizeOfString;
 
 		u32LastSlash = 0;
-		for (uint32_t i = 0; i < u32SizeOfString; i++) {
+		for (uint32_t i = 0; i < u32SizeOfString; ++i)
+		{
 			if (pCurrentHeader->szFilename[i] == '/')
 				u32LastSlash = i;
 		}
 
 		char *filename = "";
-		substr(filename, pCurrentHeader->szFilename, i == 0 ? u32LastSlash : u32LastSlash+1, u32SizeOfString);
-		printf("FILENAME IS %s\n", filename);
+		substr(filename, pCurrentHeader->szFilename, i == 0 ? u32LastSlash : u32LastSlash + 1, u32SizeOfString);
+
+		printf("FILENAME IS %s\n", pCurrentHeader->szFilename);
+
+		STarHeaderNode *pTarHeaderNode;
+		pTarHeaderNode->pcFilename = "";
+		strcpy(filename, pTarHeaderNode->pcFilename, strlen(filename));
+
+		if (i != 0 && pCurrentHeader->u8IsFile == 1)
+			u32LastSlash -= 1;
+
+		for (uint32_t i = u32LastSlash; i > 0; --i)
+		{
+			if (pCurrentHeader->szFilename[i] == '/')
+				u32PreviousSlash = i;
+		}
+
+		substr(filename, pCurrentHeader->szFilename, u32PreviousSlash, u32LastSlash);
+
+		printf("I IS %d AND PREVIOUS FILENAME IS %s\n", u32PreviousSlash, filename);
 
 		i++;
 	}
