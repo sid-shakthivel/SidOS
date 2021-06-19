@@ -57,17 +57,15 @@ void fnKernelMain(multiboot_info_t *pMBD)
 
 	fnInitialiseFilesystem();
 
-	printf("IN %s: %s and %s\n", pRootFolder->szFormattedFilename, pRootFolder->pNextHeader[0]->szFormattedFilename, pRootFolder->pNextHeader[1]->szFormattedFilename);
-
 	fnInitialiseTasks();
 
 	fnSetupTimer(100);
 
-	//  fnClearMaskOfIRQ(0x00);
+	fnClearMaskOfIRQ(0x00);
 
-	STask *pTaskOne = fnCreateNewTask("Task 1", fnTestFunc);
-	STask *pTaskTwo = fnCreateNewTask("Task 2", fnBestFunc);
+	STask *pTaskOne = fnCreateNewTask("Task 1", fnTestFunc, false);
+	STask *pTaskTwo = fnCreateNewTask("Task 2", fnBestFunc, false);
 
-	pTaskOne = pTaskOne;
-	pTaskTwo = pTaskTwo;
+//	pTaskOne = pTaskOne;
+//	pTaskTwo = pTaskTwo;
 }

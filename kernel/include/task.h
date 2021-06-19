@@ -18,7 +18,7 @@ typedef struct SLinkedList {
 	uint32_t u32Length;
 } SLinkedList;
 
-STask *fnCreateNewTask(char *szName, int(*fnFunc)());
+STask *fnCreateNewTask(char *szName, int(*fnFunc)(), bool bIsUserSpace);
 
 extern SLinkedList *LinkedListOfTasks;
 
@@ -29,6 +29,8 @@ STask *fnReturnNewTask();
 void fnLoopThroughLinkedList();
 
 void fnDeleteTask(char *szName);
+
+STask *fnCreateNewTask(char *szName, int(*fnFunc)(), bool bIsUserSpace);
 
 void fnExit();
 

@@ -18,7 +18,7 @@ void fnInitialiseTasks() {
 	LinkedListOfTasks = (SLinkedList *) malloc(sizeof(SLinkedList));
 }
 
-STask *fnCreateNewTask(char *szName, int(*fnFunc)())
+STask *fnCreateNewTask(char *szName, int(*fnFunc)(), bool bIsUserSpace)
 {
 	STask *pNewTask = (STask *) malloc(sizeof(STask));
 	pNewTask->szName = szName;
@@ -29,10 +29,10 @@ STask *fnCreateNewTask(char *szName, int(*fnFunc)())
 
 	//	IRET Stuff
 	*(--pu32ESP) = 0; // Stack Alignment
-	*(--pu32ESP) = 0x10; // SS
+	*(--pu32ESP) = bIsUserSpace ? 0x20 : 0x10; // SS
 	*(--pu32ESP) = (uint32_t)pNewTask->pu32ESP; // ESP
 	*(--pu32ESP) = 0x202; // EFLAGS
-	*(--pu32ESP) = 0x8; // CS
+	*(--pu32ESP) = bIsUserSpace ? 0x18 : 0x8; // CS
 	*(--pu32ESP) = (uint32_t) fnFunc; // EIP
 
 //	General Registers
