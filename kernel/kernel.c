@@ -45,27 +45,30 @@ void fnKernelMain(multiboot_info_t *pMBD)
 	multiboot_module_t *pGrubModule = (multiboot_module_t *)pMBD->mods_addr;
 	uint32_t pModuleStartAddress = (uint32_t)pGrubModule->mod_start;
 
-	uint32_t u32SizeOfTarBall = fnCalculateEndOfTarball(pModuleStartAddress) - pModuleStartAddress;
+	// uint32_t u32SizeOfTarBall = fnCalculateEndOfTarball(pModuleStartAddress) - pModuleStartAddress;
 
-	memcpy((char *)5283840, (char *)pModuleStartAddress, u32SizeOfTarBall);
+	// memcpy((char *)pModuleStartAddress, (char *)pModuleStartAddress, u32SizeOfTarBall);
 
-	fnCalculateEndOfTarball(5283840);
+	// fnCalculateEndOfTarball(pModuleStartAddress);
 
-	uint32_t u32StartOfMemory = fnInitialisePaging(u32SizeOfTarBall);
+	typedef int (*call_module_t)(void);
+	call_module_t fnUserSpaceProgram = (call_module_t)pModuleStartAddress;
 
-	fnInitialisePageFrameAllocator(u32StartOfMemory, fnCalculateMaximumMemory(pMBD));
+	// uint32_t u32StartOfMemory = fnInitialisePaging(0);
 
-	fnInitialiseFilesystem();
+	// uint32_t u32StartOfMemory = fnInitialisePaging(u32SizeOfTarBall);
 
-	fnInitialiseTasks();
+	// fnInitialisePageFrameAllocator(u32StartOfMemory, fnCalculateMaximumMemory(pMBD));
+
+	// fnInitialiseFilesystem();
+
+	// fnInitialiseTasks();
 
 	fnSetupTimer(100);
 
 	fnClearMaskOfIRQ(0x00);
 
-	STask *pTaskOne = fnCreateNewTask("Task 1", fnTestFunc, false);
-	STask *pTaskTwo = fnCreateNewTask("Task 2", fnBestFunc, false);
+	STask *pTaskOne = fnCreateNewTask("Task 1", fnUserSpaceProgram, true);
 
-//	pTaskOne = pTaskOne;
-//	pTaskTwo = pTaskTwo;
+	pTaskOne = pTaskOne;
 }

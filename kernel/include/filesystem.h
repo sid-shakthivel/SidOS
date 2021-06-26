@@ -21,11 +21,13 @@ typedef struct STarHeader
 	struct STarHeader *pPreviousHeader;
 	char szFormattedFilename[100];
 	uint32_t u32Index;
+	uint32_t u32Address;
 } STarHeader;
 
 extern STarHeader *rgfFileSystem[32];
 extern STarHeader *pRootFolder;
 uint32_t fnCalculateEndOfTarball(uint32_t address);
 void fnInitialiseFilesystem();
+char *fnPrintFileContents(STarHeader *pHeader);
 
 #endif //TESOS_FILESYSTEM_H

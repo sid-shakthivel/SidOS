@@ -37,6 +37,8 @@ uint32_t fnCalculateEndOfTarball(uint32_t address)
 		if (u32Size == 0)
 			pHeader->u8IsFile = 1;
 
+		pHeader->u32Address = address;
+
 		address += ((u32Size / 512) + 1) * 512;
 
 		rgfFileSystem[i] = pHeader;
@@ -108,4 +110,12 @@ void fnInitialiseFilesystem()
 
 		i++;
 	}
+}
+
+char *fnPrintFileContents(STarHeader *pHeader)
+{
+	char *pcFileContent = "";
+	uint32_t u32Size = fnCalculateSize(pHeader->szSize);
+	memcpy(pcFileContent, (char *)pHeader->u32Address + 512, u32Size);
+	return pcFileContent;
 }
